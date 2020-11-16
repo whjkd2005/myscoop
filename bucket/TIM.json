@@ -4,7 +4,6 @@
     "license": "Freeware",
     "version": "3.2.0.21856",
     "url": "https://dldir1.qq.com/qqfile/qq/PCTIM/TIM3.2.0/TIM3.2.0.21856.exe#/dl.7z",
-    "hash": "ddde13e2f01aca9716310117f7afd8ced114d5d48ee31bb6bc6cea0bedeaf40d",
     "installer": {
         "script": [
             "$timRoaming = \"$env:APPDATA\\Tencent\\TIM\"",
