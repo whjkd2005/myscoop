@@ -1,0 +1,39 @@
+{
+    "homepage": "tim.qq.com",
+    "description": "An instant messaging software service developed by Tencent",
+    "license": "Freeware",
+    "version": "3.2.0.21856",
+    "url": "https://dldir1.qq.com/qqfile/qq/PCTIM/TIM3.2.0/TIM3.2.0.21856.exe#/dl.7z",
+    "hash": "ddde13e2f01aca9716310117f7afd8ced114d5d48ee31bb6bc6cea0bedeaf40d",
+    "installer": {
+        "script": [
+            "$qqRoaming = \"$env:APPDATA\\Tencent\\TIM\"",
+            "if (!(Test-Path $qqRoaming)) {",
+            "    New-Item -Path \"$qqRoaming\" -ItemType Directory | Out-Null",
+            "} else {",
+            "    Get-ChildItem -Path \"$dir\\Application Data\\Tencent\\TIM\" -Name | ForEach-Object {",
+            "        if (Test-Path \"$qqRoaming\\$_\") {",
+            "            Remove-Item \"$qqRoaming\\$_\" -Recurse -Force",
+            "        }",
+            "    }",
+            "}",
+            "Move-Item \"$dir\\Application Data\\Tencent\\TIM\\*\" \"$qqRoaming\" -Force",
+            "Move-Item \"$dir\\Files\\*\" \"$dir\" -Force",
+            "@('Application Data', 'Common', 'Files') | ForEach-Object {",
+            "    Remove-Item \"$dir\\$_\" -Recurse -Force",
+            "}"
+        ]
+    },
+    "uninstaller": {
+        "script": "Remove-Item \"$env:APPDATA\\Tencent\\TIM\" -Recurse -Force"
+    },
+    "shortcuts": [
+        [
+            "Bin\\QQScLauncher.exe",
+            "QQ"
+        ]
+    ],
+    "autoupdate": {
+        "url": "https://dldir1.qq.com/qqfile/qq/PCTIM$majorVersion.$minorVersion.$patchVersion/TIM$majorVersion.$minorVersion.$patchVersion.$buildVersion.exe#/dl.7z"
+    }
+}
