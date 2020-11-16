@@ -1,0 +1,26 @@
+{
+    "name": "whjkd",
+    "version": "0.1.0",
+    "homepage": "https://github.com/whjkd2005/myscoop",
+    "description": "A Personal Scoop Bucket for Facilitating Academic Research.",
+    "private": true,
+    "repository": {
+        "url": "git+https://github.com/whjkd2005/myscoop.git",
+        "type": "git"
+    },
+    "scripts": {
+        "checkurls": "powershell -noprofile ./bin/checkurls.ps1",
+        "checkver": "powershell -noprofile ./bin/checkver.ps1",
+        "missing-checkver": "powershell -noprofile ./bin/missing-checkver.ps1",
+        "format": "powershell -noprofile  ./bin/formatjson.ps1",
+        "update": "powershell -noprofile ./bin/auto-pr.ps1 -push",
+        "sync": "powershell -noprofile ./bin/sync-mirror.ps1",
+        "test": "powershell -noprofile ./bin/test.ps1"
+    },
+    "bugs": {
+        "url": "https://github.com/whjkd2005/myscoop/issues"
+    },
+    "main": "index.js",
+    "author": "integzz",
+    "license": "ISC"
+}
