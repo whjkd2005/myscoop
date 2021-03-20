@@ -1,0 +1,12 @@
+{
+    "homepage": "https://github.com/ClashDotNetframework/ClashDotNetframework",
+    "description": "A Clash GUI Proxy For Windows Based On .NET Framework 4.6.1",
+    "version": "0.0.8",
+    "url": "https://github.com/ClashDotNetFramework/ClashDotNetFramework/releases/download/v0.0.8/CDF-v0.0.8.7z",
+    "bin": [
+        [
+            "ClashDotNetFramework.exe",
+            "ClashDotNetFramework"
+        ]
+    ],
+}
