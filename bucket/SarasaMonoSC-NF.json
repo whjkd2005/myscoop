@@ -3,12 +3,10 @@
     "version": "2.0.1",
     "license": "OFL-1.1",
     "homepage": "https://github.com/laishulu/Sarasa-Mono-SC-Nerd",
-    "url": "https://github.com/laishulu/Sarasa-Mono-SC-Nerd/archive/refs/tags/v2.0.1.zip#/dl.7z_",
+    "url": "https://github.com/laishulu/Sarasa-Mono-SC-Nerd/archive/refs/tags/v2.0.1.zip",
     "extract_dir": "Sarasa-Mono-SC-Nerd-2.0.1",
     "installer": {
         "script": [
-            "Invoke-ExternalCommand 7z -ArgumentList('e', \"$dir\\dl.7z_\" ,\"-o$dir\", '*-sc-*.ttf') | Out-Null",
-            "Remove-Item \"$dir\\dl.7z_\"",
             "Get-ChildItem $dir -filter 'sarasa*.ttf' | ForEach-Object {",
             "  New-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts' -Name $_.Name.Replace($_.Extension, ' (TrueType)') -Value $_.Name -Force | Out-Null",
             "  Copy-Item $_.FullName -destination \"$env:windir\\Fonts\"",
