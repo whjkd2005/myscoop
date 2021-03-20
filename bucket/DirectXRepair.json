@@ -1,0 +1,15 @@
+{
+    "version": "4.0",
+    "description": "DirectX修复工具(DirectX Repair)是一款DirectX系统级工具软件，简便易用。DirectX修复工具(DirectX Repair)程序为绿色版，无需安装，可直接运行",
+    "homepage": "https://blog.csdn.net/vbcom/article/details/7245186",
+    "url": "http://cdn.weidown.com/202006/DirectX.Repair_4.0_Enhanced.Edition.7z",
+    "hash": "3f0208b3355b179a372770b317c27b9539a252f8343497422f22897834d4cc7b",
+    "extract_dir": "DirectX_Repair(Enhanced_Edition)",
+    "persist": "Settings.ini",
+    "shortcuts": [
+        [
+            "DirectX Repair.exe",
+            "DirectX Repair"
+        ]
+    ],
+}
