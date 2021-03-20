@@ -1,0 +1,38 @@
+{
+    "homepage": "https://github.com/HMBSbige/ShadowsocksR-Windows/",
+    "description": "ShadowsocksR-Windows Client by HMBSbige",
+    "version": "5.2.4",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.2.4/ShadowsocksR-Win64-5.2.4.7z",
+            "hash": "036535816DCED6A0904AE545885854D3294FA4E0398D1337AC307FB3D8FE1CE4"
+        },
+        "32bit": {
+            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.2.4/ShadowsocksR-Win32-5.2.4.7z",
+            "hash": "FDD30A6A7BAD0860C932B0344FCC2002A1EAA2BD85509BAAEC241D8B17DD5270"
+        }
+    },
+    "extract_dir": "ShadowsocksR",
+    "pre_install": [
+        "function CreateFile ($name, $value = $null) {",
+        "    if (!(Test-Path \"$persist_dir\\$name\")) {",
+        "        Set-Content \"$dir\\$name\" $value -Encoding Ascii",
+        "    }",
+        "}",
+        "CreateFile 'gui-config.json' '{}' ",
+        "'pac.txt', 'user-rule.txt' | ForEach-Object { CreateFile $_ }"
+    ],
+    "persist": [
+        "gui-config.json",
+        "user-rule.txt",
+        "pac.txt"
+    ],
+    "bin": "",
+    "shortcuts": [
+        [
+            "ShadowsocksR.exe",
+            "SSR"
+        ]
+    ],
+}
