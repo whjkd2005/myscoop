@@ -3,7 +3,7 @@
     "description": "A Clash GUI Proxy For Windows Based On .NET Framework 4.6.1",
     "version": "1.0.0",
     "url": "https://github.com/ClashDotNetFramework/ClashDotNetFramework/releases/download/v1.0.0/Clash.NET.1.0.0-x64.7z",
-    "extract_dir": "Clash .NET Framework",
+    "extract_dir": "Clash .NET",
     "shortcuts": [
         [
             "ClashDotNet.exe",
