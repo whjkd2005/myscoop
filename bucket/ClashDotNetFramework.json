@@ -6,8 +6,8 @@
     "extract_dir": "Clash .NET Framework",
     "shortcuts": [
         [
-            "ClashDotNetFramework.exe",
-            "ClashDotNetFramework"
+            "ClashDotNet.exe",
+            "ClashDotNet"
         ]
     ],
 }
