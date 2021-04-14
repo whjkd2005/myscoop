@@ -2,8 +2,8 @@
     "homepage": "https://github.com/ClashDotNetframework/ClashDotNetframework",
     "description": "A Clash GUI Proxy For Windows Based On .NET 5",
     "version": "1.0.0",
-    "url": "https://github.com/ClashDotNetFramework/ClashDotNetFramework/releases/download/v1.0.0/Clash.NET.Setup.1.0.0.x64.exe
-#/dl.7z",
+    "url": "https://github.com/ClashDotNetFramework/ClashDotNetFramework/releases/download/v1.0.0/Clash.NET.1.0.0-x64.7z",
+    "extract_dir": "Clash .NET",
     "persist": "data",
     "shortcuts": [
         [
