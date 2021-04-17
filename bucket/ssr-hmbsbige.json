@@ -5,11 +5,11 @@
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.2.4/ShadowsocksR-Win64-5.2.5.7z",
+            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.2.5/ShadowsocksR-Win64-5.2.5.7z",
             "hash": "56C99E67C8EA0311E3FD59917CFD150375A9DFBCF0BE4F46E9E632731DDF23C4"
         },
         "32bit": {
-            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.2.4/ShadowsocksR-Win32-5.2.5.7z",
+            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.2.5/ShadowsocksR-Win32-5.2.5.7z",
             "hash": "990CC4F865991E8C1591500433B2EA9BA848AC45C70D47D67C853CF559E66AD3"
         }
     },
