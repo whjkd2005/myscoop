@@ -3,7 +3,7 @@
     "version": "0.30.2",
     "license": "OFL-1.1",
     "homepage": "https://github.com/be5invis/Sarasa-Gothic",
-    "url": "https://github.com/be5invis/Sarasa-Gothic/releases/download/v0.30.2/sarasa-gothic-ttf-0.30.2.7z#/dl.7z_",
+    "url": "https://mirrors.bfsu.edu.cn/github-release/be5invis/Sarasa-Gothic/Sarasa%20Gothic%20version%200.30.2/sarasa-gothic-ttf-0.30.2.7z#/dl.7z_",
     "checkver": "github",
     "autoupdate": {
         "url": "https://github.com/be5invis/Sarasa-Gothic/releases/download/v$version/sarasa-gothic-ttf-$version.7z#/dl.7z_"
