@@ -1,0 +1,33 @@
+{
+    "version": "2.003",
+    "license": "OFL-1.1",
+    "homepage": "https://github.com/adobe-fonts/source-han-sans/",
+    "url": "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SourceHanSansSC.zip",
+    "hash": "d23653e3a5ed75c49d86178277fd25ddbcd24226e829d5e0bdb3e63b171504c8",
+    "checkver": {
+        "url": "https://github.com/adobe-fonts/source-han-sans/releases",
+        "regex": "source-han-sans/tree/([\\d.]+)R"
+    },
+    "autoupdate": {
+        "url": "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SourceHanSansSC.zip"
+    },
+    "installer": {
+        "script": [
+            "if(!(is_admin)) { error \"Admin rights are required, please run 'sudo scoop install $app'\"; exit 1 }",
+            "Get-ChildItem $dir -filter '*.otf' | ForEach-Object {",
+            "  New-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts' -Name $_.Name.Replace($_.Extension, ' (TrueType)') -Value $_.Name -Force | Out-Null",
+            "  Copy-Item $_.FullName -destination \"$env:windir\\Fonts\"",
+            "}"
+        ]
+    },
+    "uninstaller": {
+        "script": [
+            "if(!(is_admin)) { error \"Admin rights are required, please run 'sudo scoop uninstall $app'\"; exit 1 }",
+            "Get-ChildItem $dir -filter '*.otf' | ForEach-Object {",
+            "  Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts' -Name $_.Name.Replace($_.Extension, ' (TrueType)') -Force -ErrorAction SilentlyContinue",
+            "  Remove-Item \"$env:windir\\Fonts\\$($_.Name)\" -Force -ErrorAction SilentlyContinue",
+            "}",
+            "Write-Host \"Font family 'Source Han Sans SC' has been uninstalled and will not be present after restarting your computer.\" -Foreground Magenta"
+        ]
+    }
+}
