@@ -1,11 +1,11 @@
 {
-    "version": "0.3.5",
+    "version": "0.3.6",
     "description": "高颜值的第三方网易云播放器",
     "homepage": "https://github.com/qier222/YesPlayMusic",
     "license": {
         "identifier": "MIT"
     },
-    "url": "https://github.com/qier222/YesPlayMusic/releases/download/v0.3.5/YesPlayMusic-0.3.5.exe#/YesPlayMusic.exe",
+    "url": "https://github.com/qier222/YesPlayMusic/releases/download/v0.3.6/YesPlayMusic-0.3.6.exe#/YesPlayMusic.exe",
     "shortcuts": [
         [
             "YesPlayMusic.exe",
