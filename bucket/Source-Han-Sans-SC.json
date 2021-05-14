@@ -2,14 +2,18 @@
     "version": "2.004",
     "license": "OFL-1.1",
     "homepage": "https://github.com/adobe-fonts/source-han-sans/",
-    "url": "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SourceHanSansSC.zip",
-    "hash": "d23653e3a5ed75c49d86178277fd25ddbcd24226e829d5e0bdb3e63b171504c8",
+    "url": [
+        "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SimplifiedChinese/SourceHanSansSC-Bold.otf",
+        "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SimplifiedChinese/SourceHanSansSC-ExtraLight.otf",
+        "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SimplifiedChinese/SourceHanSansSC-Heavy.otf",
+        "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SimplifiedChinese/SourceHanSansSC-Light.otf",
+        "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SimplifiedChinese/SourceHanSansSC-Medium.otf",
+        "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SimplifiedChinese/SourceHanSansSC-Normal.otf",
+        "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SimplifiedChinese/SourceHanSansSC-Regular.otf",
+        ],
     "checkver": {
         "url": "https://github.com/adobe-fonts/source-han-sans/releases",
         "regex": "source-han-sans/tree/([\\d.]+)R"
-    },
-    "autoupdate": {
-        "url": "https://mirrors.bfsu.edu.cn/adobe-fonts/source-han-sans/OTF/SourceHanSansSC.zip"
     },
     "installer": {
         "script": [
