@@ -19,7 +19,7 @@
     ],
     "persist": [
         "Profile",
-        "config.yaml"
+        "config.yaml",
         "Country.mmdb"
     ]
 }
