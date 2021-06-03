@@ -1,0 +1,21 @@
+{
+    "version": "1.0.11451",
+    "description": "Official windows command line installer",
+    "homepage": "https://github.com/microsoft/winget-cli",
+    "license": {
+        "identifier": "MIT",
+        "url": "https://github.com/microsoft/winget-cli/blob/master/LICENSE"
+    },
+    "url": "https://github.com/microsoft/winget-cli/releases/download/v1.0.11451/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle#/cosi.7z",
+    "pre_install": [
+        "Get-ChildItem \"$dir\\*\" -Exclude 'AppInstaller_x*.appx' -Force -Recurse | Remove-Item -Force -Recurse",
+        "$a = if ($architecture -like '64*') { '64' } else { '86' }",
+        "Expand-7zipArchive \"$dir\\AppInstaller_x$a.appx\"",
+        "Remove-Item \"$dir\\AppInstaller_x*.appx\" -Force"
+    ],
+    "bin": ["AppInstallerCLI.exe", ["AppInstallerCLI.exe", "winget"]],
+    "checkver": "github",
+    "autoupdate": {
+        "url": "https://github.com/microsoft/winget-cli/releases/download/v$version-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle#/cosi.7z"
+    }
+}
