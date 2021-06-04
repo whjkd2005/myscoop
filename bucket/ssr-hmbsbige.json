@@ -1,16 +1,16 @@
 {
     "homepage": "https://github.com/HMBSbige/ShadowsocksR-Windows/",
     "description": "ShadowsocksR-Windows Client by HMBSbige",
-    "version": "5.2.5",
+    "version": "5.3.0",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.2.5/ShadowsocksR-Win64-5.2.5.7z",
-            "hash": "56C99E67C8EA0311E3FD59917CFD150375A9DFBCF0BE4F46E9E632731DDF23C4"
+            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.3.0/ShadowsocksR-Win64-5.3.0.7z",
+            "hash": "16631064DAB8F0B8D55D75D47C4FE9FA0C13DEAE99376CE62AA5455EFF794CC2"
         },
         "32bit": {
-            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.2.5/ShadowsocksR-Win32-5.2.5.7z",
-            "hash": "990CC4F865991E8C1591500433B2EA9BA848AC45C70D47D67C853CF559E66AD3"
+            "url": "https://github.com/HMBSbige/ShadowsocksR-Windows/releases/download/5.3.0/ShadowsocksR-Win32-5.3.0.7z",
+            "hash": "1C907652EBFA9AA38861E82DA4AABA0F67D103F6E219101EF32CFC9D9C681BC1"
         }
     },
     "extract_dir": "ShadowsocksR",
