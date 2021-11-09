@@ -1,5 +1,5 @@
 {
-    "version": "5.0.11",
+    "version": "5.0.12",
     "description": "Microsoft .NET 5.0 Desktop Runtime",
     "homepage": "https://dotnet.microsoft.com/download/dotnet",
     "license": {
@@ -7,7 +7,7 @@
         "url": "https://www.microsoft.com/en-us/legal/intellectualproperty/copyright/default.aspx"
     },
     "notes": "You can now remove this installer with 'scoop uninstall windowsdesktop-runtime'",
-    "url": "https://dotnetcli.blob.core.windows.net/dotnet/WindowsDesktop/5.0.11/windowsdesktop-runtime-5.0.11-win-x86.exe",
+    "url": "https://dotnetcli.blob.core.windows.net/dotnet/WindowsDesktop/5.0.12/windowsdesktop-runtime-5.0.12-win-x86.exe",
     "pre_install": "if (!(is_admin)) { throw 'Admin privileges are required.' }",
     "installer": {
         "script": "Invoke-ExternalCommand \"$dir\\$fname\" -ArgumentList '/install', '/quiet', '/norestart' -RunAs | Out-Null"
