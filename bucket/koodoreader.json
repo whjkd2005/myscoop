@@ -1,9 +1,9 @@
 {
     "homepage": "https://github.com/troyeguo/koodo-reader",
     "description": "A cross-platform ebook reader",
-    "version": "1.3.4",
+    "version": "1.3.7",
     "license": "AGPL3.0",
-    "url": "https://github.com/troyeguo/koodo-reader/releases/download/v1.3.4/Koodo-Reader-1.3.4-x64-Win.zip",
+    "url": "https://github.com/troyeguo/koodo-reader/releases/download/v1.3.7/Koodo-Reader-1.3.7-x64-Win.zip",
     "shortcuts": [
         [
             "Koodo Reader.exe",
