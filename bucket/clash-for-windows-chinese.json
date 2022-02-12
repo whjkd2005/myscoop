@@ -1,5 +1,5 @@
 {
-    "version": "0.19.7",
+    "version": "0.19.8",
     "description": "Clash for Windows 原版简体中文翻译补丁",
     "homepage": "https://github.com/BoyceLig/Clash_Chinese_Patch",
     "license": "Unknown",
@@ -8,8 +8,7 @@
         "软件仅供学习，24小时内删除"
     ],
     "depends": "apps/clash-for-windows",
-    "url": "https://github.com/BoyceLig/Clash_Chinese_Patch/releases/download/0.19.7/app.7z",
-    "hash": "c66e3c5c105faca62eeef9b5ee0917ca3e46c00068bf1113e06909f383031391",
+    "url": "https://github.com/BoyceLig/Clash_Chinese_Patch/releases/download/0.19.8/app.asar",
     "installer": {
         "script": [
             "Get-Process clash* | Stop-Process",
@@ -31,6 +30,6 @@
     },
     "checkver": "github",
     "autoupdate": {
-        "url": "https://github.com/BoyceLig/Clash_Chinese_Patch/releases/download/$version/app.7z"
+        "url": "https://github.com/BoyceLig/Clash_Chinese_Patch/releases/download/$version/app.asar"
     }
 }
