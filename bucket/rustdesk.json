@@ -2,9 +2,9 @@
     "homepage": "https://rustdesk.com/",
     "description": "Yet another remote desktop software",
     "license": "GPL-3.0",
-    "version": "1.1.8",
-    "url": "https://github.com/rustdesk/rustdesk/releases/download/1.1.8/rustdesk-1.1.8-windows_x64-portable.zip",
-    "bin": "rustdesk-1.1.8.exe",
+    "version": "1.1.9",
+    "url": "https://github.com/rustdesk/rustdesk/releases/download/1.1.9/rustdesk-1.1.9-windows_x64-portable.zip",
+    "bin": "rustdesk-1.1.9.exe",
     "shortcuts": [["rustdesk.exe", "rustdesk"]],
     "checkver": {
         "github": "https://github.com/rustdesk/rustdesk/"
