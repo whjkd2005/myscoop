@@ -2,7 +2,7 @@
     "version": "1.0"
     "homepage": "https://github.com/whjkd2005/HarmonyOSHans"
     "url": "https://github.com/whjkd2005/HarmonyOSHans/archive/refs/tags/v1.0.zip",
-    "extract_dir": "HarmonyOSHans-v1.0",
+    "extract_dir": "HarmonyOSHans-1.0",
     "installer": {
         "script": [
             "Get-ChildItem $dir -filter 'HarmonyOSHans*.ttf' | ForEach-Object {",
