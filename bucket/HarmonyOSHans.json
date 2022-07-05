@@ -1,0 +1,23 @@
+{
+    "version": "1.0"
+    "homepage": "https://github.com/whjkd2005/HarmonyOSHans"
+    "url": "https://github.com/whjkd2005/HarmonyOSHans/archive/refs/tags/v1.0.zip",
+    "extract_dir": "HarmonyOSHans-v1.0",
+    "installer": {
+        "script": [
+            "Get-ChildItem $dir -filter 'MiSans*.ttf' | ForEach-Object {",
+            "  New-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts' -Name $_.Name.Replace($_.Extension, ' (TrueType)') -Value $_.Name -Force | Out-Null",
+            "  Copy-Item $_.FullName -destination \"$env:windir\\Fonts\"",
+            "}"
+        ]
+    },
+    "uninstaller": {
+        "script": [
+            "Get-ChildItem $dir -filter 'MiSans*.ttf' | ForEach-Object {",
+            "  Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts' -Name $_.Name.Replace($_.Extension, ' (TrueType)') -Force -ErrorAction SilentlyContinue",
+            "  Remove-Item \"$env:windir\\Fonts\\$($_.Name)\" -Force -ErrorAction SilentlyContinue",
+            "}",
+            "Write-Host \"The 'MiSans' Font family has been uninstalled and will not be present after restarting your computer.\" -Foreground Magenta"
+        ]
+    }
+}
