@@ -1,0 +1,30 @@
+{
+    "version": "1.0.0",
+    "license": "OFL-1.1",
+    "homepage": "https://github.com/whjkd2005/HarmonyOS-Fonts",
+    "url": [
+        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Black.ttf",
+        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Bold.ttf",
+        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Light.ttf",
+        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Medium.ttf",
+        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Regular.ttf",
+        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Thin.ttf",
+        ],
+    "installer": {
+        "script": [
+            "Get-ChildItem $dir -filter 'HarmonyOS_Sans_SC*.ttf' | ForEach-Object {",
+            "  New-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts' -Name $_.Name.Replace($_.Extension, ' (TrueType)') -Value $_.Name -Force | Out-Null",
+            "  Copy-Item $_.FullName -destination \"$env:windir\\Fonts\"",
+            "}"
+        ]
+    },
+    "uninstaller": {
+        "script": [
+            "Get-ChildItem $dir -filter 'HarmonyOS_Sans_SC*.ttf' | ForEach-Object {",
+            "  Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts' -Name $_.Name.Replace($_.Extension, ' (TrueType)') -Force -ErrorAction SilentlyContinue",
+            "  Remove-Item \"$env:windir\\Fonts\\$($_.Name)\" -Force -ErrorAction SilentlyContinue",
+            "}",
+            "Write-Host \"The ' HarmonyOS Sans SC' Font family has been uninstalled and will not be present after restarting your computer.\" -Foreground Magenta"
+        ]
+    }
+}
