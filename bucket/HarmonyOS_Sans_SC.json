@@ -3,12 +3,12 @@
     "license": "Apache-2.0",
     "homepage": "https://gitee.com/openharmony/resources/tree/master/fonts",
     "url": [
-        "https://gitee.com/openharmony/resources/blob/master/fonts/HarmonyOS_Sans_SC_Black.ttf",
-        "https://gitee.com/openharmony/resources/blob/master/fonts/HarmonyOS_Sans_SC_Bold.ttf",
-        "https://gitee.com/openharmony/resources/blob/master/fonts/HarmonyOS_Sans_SC_Light.ttf",
-        "https://gitee.com/openharmony/resources/blob/master/fonts/HarmonyOS_Sans_SC_Medium.ttf",
-        "https://gitee.com/openharmony/resources/blob/master/fonts/HarmonyOS_Sans_SC_Regular.ttf",
-        "https://gitee.com/openharmony/resources/blob/master/fonts/HarmonyOS_Sans_SC_Thin.ttf",
+        "https://gitee.com/openharmony/resources/raw/master/fonts/HarmonyOS_Sans_SC_Black.ttf",
+        "https://gitee.com/openharmony/resources/raw/master/fonts/HarmonyOS_Sans_SC_Bold.ttf",
+        "https://gitee.com/openharmony/resources/raw/master/fonts/HarmonyOS_Sans_SC_Light.ttf",
+        "https://gitee.com/openharmony/resources/raw/master/fonts/HarmonyOS_Sans_SC_Medium.ttf",
+        "https://gitee.com/openharmony/resources/raw/master/fonts/HarmonyOS_Sans_SC_Regular.ttf",
+        "https://gitee.com/openharmony/resources/raw/master/fonts/HarmonyOS_Sans_SC_Thin.ttf",
         ],
     "installer": {
         "script": [
