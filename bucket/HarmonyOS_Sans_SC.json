@@ -3,12 +3,7 @@
 	    "license": "OFL-1.1",
 	    "homepage": "https://github.com/whjkd2005/HarmonyOS-Fonts",
 	    "url": [
-	        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Black.ttf",
-	        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Bold.ttf",
-	        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Light.ttf",
-	        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Medium.ttf",
-	        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Regular.ttf",
-	        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Thin.ttf",
+	        "https://github.com/whjkd2005/HarmonyOS-Fonts/releases/download/HarmonyOS_Sans_SC/HarmonyOSSans-VF.ttf ",
 	        ],
 	    "installer": {
 	        "script": [
