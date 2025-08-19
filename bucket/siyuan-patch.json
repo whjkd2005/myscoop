@@ -6,7 +6,7 @@
         "identifier": "Unknown"
     },
     "depends": "7zip",
-    "url": "https://github.com/demoshang/siyuan-patch/releases/download/v3.2.1/siyuan-3.2.1-win.exe#/dl.7z",
+    "url": "https://github.com/demoshang/siyuan-patch/releases/download/v3.2.1/siyuan-v3.2.1-win.exe#/dl.7z",
     "pre_install": [
         "7z x \"$dir\\`$PLUGINSDIR\\*.7z\" -o\"$dir\\`$PLUGINSDIR\\siyuan\"",
         "Remove-Item -R -Path $dir\\resources",
@@ -25,6 +25,6 @@
         "regex": "/releases/tag/v(?<version>.+?)\""
     },
     "autoupdate": {
-        "url": "https://github.com/demoshang/siyuan-patch/releases/download/v$version/siyuan-$version-win.exe#/dl.7z"
+        "url": "https://github.com/demoshang/siyuan-patch/releases/download/v$version/siyuan-v$version-win.exe#/dl.7z"
     }
 }
