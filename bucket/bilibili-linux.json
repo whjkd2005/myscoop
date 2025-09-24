@@ -3,11 +3,11 @@
     "description": "基于哔哩哔哩官方客户端移植的Linux版本 支持漫游",
     "homepage": "https://github.com/msojocs/bilibili-linux",
     "license": "MIT",
-    "depends": "7zip",
+    "depends": "scoop-apps/7zip",
     "architecture": {
         "64bit": {
             "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.2-1/bilibili-1.17.2-x64.exe",
-            "extract_to": "installer_files"
+            "hash": "eb9b2b76b47bbae4c749362d894cd17f7b6cf743c47ab7392f60f42acb9e3535"
         }
     },
     "bin": "bilibili.exe",
@@ -18,8 +18,11 @@
         ]
     ],
     "pre_install": [
-        "Expand-7zipArchive \"$dir\\installer_files\\`$PLUGINSDIR\\app-64.7z\" \"$dir\"",
-        "Remove-Item \"$dir\\installer_files\" -Recurse -Force",
+        "New-Item -Path \"$dir\\temp_extract\" -ItemType Directory -Force | Out-Null",
+        "Expand-7zipArchive \"$dir\\*.exe\" \"$dir\\temp_extract\""，
+        "Expand-7zipArchive \"$dir\\temp_extract\\`$PLUGINSDIR\\app-64.7z\" \"$dir\"",
+        "Remove-Item \"$dir\\temp_extract\" -Recurse -Force"，
+        "Remove-Item \"$dir\\*.exe\" -Force"，
         "Remove-Item \"$dir\\Uninstall*\" -Recurse -Force -ErrorAction SilentlyContinue"
     ],
     "persist": "config",
@@ -30,9 +33,11 @@
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$version-x64.exe",
-                "extract_to": "installer_files"
+                "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$version-x64.exe"
             }
+        },
+        "hash": {
+            "url": "$url.sha256"
         }
     }
 }
