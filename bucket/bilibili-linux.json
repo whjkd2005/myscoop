@@ -2,24 +2,24 @@
     "version": "1.17.2-1",
     "description": "基于哔哩哔哩官方客户端移植的Linux版本 支持漫游",
     "homepage": "https://github.com/msojocs/bilibili-linux",
-    "license": {
-        "identifier": "MIT"
-    },
+    "license": "MIT",
     "depends": "7zip",
     "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.2-1/bilibili-1.17.2-x64.exe#/dl.7z",
-    "pre_install": [
-             "Expand-7zipArchive \"$dir\\`$PLUGINSDIR\\app-64.7z\" \"$dir\""，
-             "Remove-Item \"$dir\\`$*\", \"$dir\\Uninstall*\" -Force -Recurse"
-    ],
+    "extract_to": "`$PLUGINSDIR",
     "bin": "bilibili.exe",
     "shortcuts": [
         [
             "bilibili.exe",
             "哔哩哔哩"
         ]
-    ],
+    ]，
+    "post_install": "Remove-Item \"$dir\\Uninstall*\" -Force -Recurse -ErrorAction SilentlyContinue",
     "checkver": {
         "url": "https://github.com/msojocs/bilibili-linux/releases",
-        "regex": "/releases/tag/v(?<version>.+?)\""
+        "regex": "/releases/tag/v(?<version>[\\d.-]+)\""
+    },
+    "autoupdate": {
+        "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$version-x64.exe#/dl.7z",
+        "extract_to": "`$PLUGINSDIR"
     }
 }
