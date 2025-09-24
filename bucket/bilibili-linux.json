@@ -12,7 +12,7 @@
             "bilibili.exe",
             "哔哩哔哩"
         ]
-    ]，
+    ],
     "post_install": "Remove-Item \"$dir\\Uninstall*\" -Force -Recurse -ErrorAction SilentlyContinue",
     "checkver": {
         "url": "https://github.com/msojocs/bilibili-linux/releases",
