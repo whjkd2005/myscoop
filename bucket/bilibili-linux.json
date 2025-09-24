@@ -18,10 +18,7 @@
         ]
     ],
     "pre_install": [
-        # 1. 从临时解压目录中，提取真正的应用压缩包
         "Expand-7zipArchive \"$dir\\installer_files\\`$PLUGINSDIR\\app-64.7z\" \"$dir\"",
-        
-        # 2. 清理所有临时文件和目录
         "Remove-Item \"$dir\\installer_files\" -Recurse -Force",
         "Remove-Item \"$dir\\Uninstall*\" -Recurse -Force -ErrorAction SilentlyContinue"
     ],
