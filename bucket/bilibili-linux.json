@@ -7,10 +7,10 @@
     },
     "depends": "7zip",
     "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.2-1/bilibili-1.17.2-x64.exe#/dl.7z",
-     "pre_install": [
+    "pre_install": [
              "Expand-7zipArchive \"$dir\\`$PLUGINSDIR\\app-64.7z\" \"$dir\""，
              "Remove-Item \"$dir\\`$*\", \"$dir\\Uninstall*\" -Force -Recurse"
-     ]
+    ],
     "bin": "bilibili.exe",
     "shortcuts": [
         [
