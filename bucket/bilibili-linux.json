@@ -4,7 +4,12 @@
     "homepage": "https://github.com/msojocs/bilibili-linux",
     "license": "MIT",
     "depends": "7zip",
-    "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.2-1/bilibili-1.17.2-x64.exe",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.2-1/bilibili-1.17.2-x64.exe",
+            "extract_to": "installer_files"
+        }
+    },
     "bin": "bilibili.exe",
     "shortcuts": [
         [
@@ -13,15 +18,24 @@
         ]
     ],
     "pre_install": [
-        "Expand-7zipArchive \"$dir\\`$PLUGINSDIR\\app-64.7z\" \"$dir\"",
-        "Remove-Item \"$dir\\`$PLUGINSDIR\" -Recurse -Force",
+        # 1. 从临时解压目录中，提取真正的应用压缩包
+        "Expand-7zipArchive \"$dir\\installer_files\\`$PLUGINSDIR\\app-64.7z\" \"$dir\"",
+        
+        # 2. 清理所有临时文件和目录
+        "Remove-Item \"$dir\\installer_files\" -Recurse -Force",
         "Remove-Item \"$dir\\Uninstall*\" -Recurse -Force -ErrorAction SilentlyContinue"
     ],
+    "persist": "config",
     "checkver": {
         "url": "https://github.com/msojocs/bilibili-linux/releases",
         "regex": "/releases/tag/v(?<version>[\\d.-]+)\""
     },
     "autoupdate": {
-        "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$version-x64.exe"
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$version-x64.exe",
+                "extract_to": "installer_files"
+            }
+        }
     }
 }
