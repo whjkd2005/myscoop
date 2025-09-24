@@ -8,10 +8,10 @@
     "depends": "7zip",
     "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.2-1/bilibili-1.17.2-x64.exe#/dl.7z",
     "pre_install": [
-        "7z x \"$dir\\`$PLUGINSDIR\\*.7z\" -o\"$dir\\`$PLUGINSDIR\\bilibili\""，
-        "Remove-Item -R -Path $dir\\resources",
-        "Move-Item $dir\\`$PLUGINSDIR\\bilibili\\* $dir -force"，
-        "Remove-Item -R -Path $dir\\`$PLUGINSDIR"
+        "7z x \"$dir\\$PLUGINSDIR\\*.7z\" -o\"$dir\\$PLUGINSDIR\\bilibili\""，
+        "Remove-Item -Recurse -Force -Path \"$dir\\resources\"",
+        "Move-Item \"$dir\\$PLUGINSDIR\\bilibili\\*\" \"$dir\" -Force"，
+        "Remove-Item -Recurse -Force -Path \"$dir\\$PLUGINSDIR\""
     ],
     "bin": "bilibili.exe",
     "shortcuts": [
