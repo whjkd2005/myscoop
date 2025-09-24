@@ -24,7 +24,6 @@
         "Remove-Item \"$dir\\bilibili-*.exe\" -Force",
         "Remove-Item \"$dir\\Uninstall*\" -Recurse -Force -ErrorAction SilentlyContinue"
     ],
-    "persist": "config",
     "checkver": {
         "url": "https://github.com/msojocs/bilibili-linux/releases",
         "regex": "/releases/tag/v(?<version>[\\d.-]+)\""
