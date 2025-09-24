@@ -7,7 +7,6 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.2-1/bilibili-1.17.2-x64.exe",
-            "hash": "eb9b2b76b47bbae4c749362d894cd17f7b6cf743c47ab7392f60f42acb9e3535"
         }
     },
     "bin": "bilibili.exe",
