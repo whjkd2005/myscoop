@@ -7,22 +7,12 @@
     },
     "depends": "7zip",
     "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.2-1/bilibili-1.17.2-x64.exe#/dl.7z",
-    "installer": {
-        "script": [
-            "Remove-Item \"$dir\\*\" -Exclude 'app-64.7z' -Force -Recurse",
-            "Expand-7zipArchive \"$dir\\$PLUGINSDIR\app-64.7z\" \"$dir\" -Removal"，
-            "Import-Module $(Join-Path $(Find-BucketDirectory -Root -Name dorado) scripts/DoradoUtils.psm1)",
-            "Mount-ExternalRuntimeData -Source \"$persist_dir\\UserData\" -Target \"$env:APPDATA\\bilibili\"",
-            "Remove-Module -Name DoradoUtils"
-        ]
-    },
-    "uninstaller": {
-        "script": [
-            "Import-Module $(Join-Path $(Find-BucketDirectory -Root -Name dorado) scripts/DoradoUtils.psm1)",
-            "Dismount-ExternalRuntimeData -Target \"$env:APPDATA\\bilibili\"",
-            "Remove-Module -Name DoradoUtils"
-        ]
-    },
+    "pre_install": [
+        "7z x \"$dir\\`$PLUGINSDIR\\*.7z\" -o\"$dir\\`$PLUGINSDIR\\bilibili\""，
+        "Remove-Item -R -Path $dir\\resources",
+        "Move-Item $dir\\`$PLUGINSDIR\\bilibili\\* $dir -force"，
+        "Remove-Item -R -Path $dir\\`$PLUGINSDIR"
+    ],
     "bin": "bilibili.exe",
     "shortcuts": [
         [
