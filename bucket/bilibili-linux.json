@@ -19,10 +19,10 @@
     ],
     "pre_install": [
         "New-Item -Path \"$dir\\temp_extract\" -ItemType Directory -Force | Out-Null",
-        "Expand-7zipArchive \"$dir\\*.exe\" \"$dir\\temp_extract\""，
+        "Expand-7zipArchive \"$dir\\*.exe\" \"$dir\\temp_extract\"",
         "Expand-7zipArchive \"$dir\\temp_extract\\`$PLUGINSDIR\\app-64.7z\" \"$dir\"",
-        "Remove-Item \"$dir\\temp_extract\" -Recurse -Force"，
-        "Remove-Item \"$dir\\*.exe\" -Force"，
+        "Remove-Item \"$dir\\temp_extract\" -Recurse -Force",
+        "Remove-Item \"$dir\\*.exe\" -Force",
         "Remove-Item \"$dir\\Uninstall*\" -Recurse -Force -ErrorAction SilentlyContinue"
     ],
     "persist": "config",
