@@ -5,7 +5,7 @@
     "license": "MPL-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.2.0/floorp-win64.installer.exe#/dl.7z"，
+            "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.2.0/floorp-win64.installer.exe#/dl.7z",
         }
     },
     "depends": "lemon/libportable",
