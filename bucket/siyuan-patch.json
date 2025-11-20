@@ -1,12 +1,12 @@
 {
-    "version": "3.3.6",
+    "version": "3.4.0",
     "description": "思源笔记本地VIP (功能特性)(第三方 S3 数据同步)",
     "homepage": "https://github.com/demoshang/siyuan-patch",
     "license": {
         "identifier": "Unknown"
     },
     "depends": "7zip",
-    "url": "https://github.com/demoshang/siyuan-patch/releases/download/v3.3.6/siyuan-v3.3.6-win.exe#/dl.7z",
+    "url": "https://github.com/demoshang/siyuan-patch/releases/download/v3.4.0/siyuan-v3.4.0-win.exe#/dl.7z",
     "pre_install": [
         "7z x \"$dir\\`$PLUGINSDIR\\*.7z\" -o\"$dir\\`$PLUGINSDIR\\siyuan\"",
         "Remove-Item -R -Path $dir\\resources",
