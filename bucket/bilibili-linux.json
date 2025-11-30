@@ -1,12 +1,12 @@
 {
-    "version": "1.17.3-1",
+    "version": "1.17.3-2",
     "description": "基于哔哩哔哩官方客户端移植的Linux版本 支持漫游",
     "homepage": "https://github.com/msojocs/bilibili-linux",
     "license": "MIT",
     "depends": "scoop-apps/7zip",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.3-1/bilibili-1.17.3-x64.exe",
+            "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.17.3-2/bilibili-1.17.3-x64.exe",
         }
     },
     "bin": "bilibili.exe",
