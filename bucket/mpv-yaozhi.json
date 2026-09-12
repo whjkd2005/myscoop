@@ -1,9 +1,9 @@
 {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "mpv-Yaozhi 高画质中文交互整合版 mpv 播放器",
     "homepage": "https://github.com/Yaozhil/mpv-Yaozhi",
     "license": "MIT",
-    "url": "https://github.com/Yaozhil/mpv-Yaozhi/releases/download/mpv-Yaozhi%EF%BC%881.0.1%EF%BC%89/Yaozhi-mpv-1.0.1.7z",
+    "url": "https://github.com/Yaozhil/mpv-Yaozhi/releases/download/mpv-Yaozhi%EF%BC%881.0.2%EF%BC%89/Yaozhi-mpv-1.0.2.7z",
     "extract_dir": "mpv-Yaozhi",
     "shortcuts": [
         ["mpv.exe", "mpv-Yaozhi"]
