@@ -1,0 +1,33 @@
+{
+    "version": "1.7.0",
+    "description": "AI 原生、GPU 加速的 Windows 终端模拟器，支持 SSH、会话持久化、分屏和 AI CLI 工作流。",
+    "homepage": "https://github.com/Kuddev/pebrel",
+    "license": {
+        "identifier": "GPL-3.0",
+        "url": "https://github.com/Kuddev/pebrel/blob/main/LICENSE"
+    },
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/Kuddev/pebrel/releases/download/v1.7.0/Pebrel-v1.7.0-windows-x64.zip",
+            "extract_dir": "Pebrel-v1.7.0-windows-x64"
+        }
+    },
+    "bin": "pebrel.exe",
+    "shortcuts": [
+        [
+            "pebrel.exe",
+            "Pebrel"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/Kuddev/pebrel"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/Kuddev/pebrel/releases/download/v$version/Pebrel-v$version-windows-x64.zip",
+                "extract_dir": "Pebrel-v$version-windows-x64"
+            }
+        }
+    }
+}
