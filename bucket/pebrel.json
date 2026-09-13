@@ -9,7 +9,6 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/Kuddev/pebrel/releases/download/v1.7.0/Pebrel-v1.7.0-windows-x64.zip",
-            "extract_dir": "Pebrel-v1.7.0-windows-x64"
         }
     },
     "bin": "pebrel.exe",
