@@ -18,6 +18,7 @@
             "Pebrel"
         ]
     ],
+    "persist": "pebrel.lua",
     "checkver": {
         "github": "https://github.com/Kuddev/pebrel"
     },
