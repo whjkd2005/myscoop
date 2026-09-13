@@ -18,7 +18,9 @@
             "Pebrel"
         ]
     ],
-    "persist": "pebrel.lua",
+    "env_set": {
+        "PEBREL_CONFIG_DIR": "$persist_dir"
+    },
     "checkver": {
         "github": "https://github.com/Kuddev/pebrel"
     },
