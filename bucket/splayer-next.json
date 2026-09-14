@@ -9,29 +9,10 @@
         }
     },
     "pre_install": [
-        "$pluginDir = Join-Path $dir '$PLUGINSDIR'",
-        "$innerArchive = Join-Path $pluginDir 'app-64.7z'",
-        "",
-        "# 如果 Scoop 没有自动展开 NSIS 文件，则先手动展开",
-        "if (!(Test-Path $innerArchive)) {",
-        "    $tempDir = Join-Path $dir '_nsis'",
-        "    New-Item -ItemType Directory -Path $tempDir -Force | Out-Null",
-        "    Expand-7ZipArchive -Path $fname -DestinationPath $tempDir",
-        "    $pluginDir = Join-Path $tempDir '$PLUGINSDIR'",
-        "    $innerArchive = Join-Path $pluginDir 'app-64.7z'",
-        "}",
-        "",
-        "if (!(Test-Path $innerArchive)) {",
-        "    throw 'SPlayer-Next: app-64.7z not found in NSIS package.'",
-        "}",
-        "",
-        "# 解开真正的应用程序文件",
-        "Expand-7ZipArchive -Path $innerArchive -DestinationPath $dir",
-        "",
-        "# 清理 NSIS 临时文件",
-        "Remove-Item -LiteralPath (Join-Path $dir '$PLUGINSDIR') -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item -LiteralPath (Join-Path $dir '_nsis') -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item -LiteralPath $fname -Force -ErrorAction SilentlyContinue"
+        "Expand-7zipArchive \"$dir\\`$PLUGINSDIR\\app-64.7z\" \"$dir\" -Removal"
+    ],
+    "post_install": [
+        "Remove-Item \"$dir\\`$PLUGINSDIR\" -Force -Recurse -ErrorAction SilentlyContinue"
     ],
     "bin": "SPlayer-Next.exe",
     "shortcuts": [
@@ -46,7 +27,7 @@
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://github.com/SPlayer-Dev/SPlayer-Next/releases/download/v$version/SPlayer-Next-$version-x64-portable.exe"
+                "url": "https://github.com/SPlayer-Dev/SPlayer-Next/releases/download/v$version/SPlayer-Next-$version-x64-portable.exe#/dl.7z"
             }
         }
     }
