@@ -8,11 +8,12 @@
             "url": "https://github.com/SPlayer-Dev/SPlayer-Next/releases/download/v1.1.0/SPlayer-Next-1.1.0-x64-portable.exe"
         }
     },
+    "extract_dir": "$PLUGINSDIR",
     "pre_install": [
-        "Expand-7zipArchive \"$dir\\`$PLUGINSDIR\\app-64.7z\" \"$dir\" -Removal"
+        "Expand-7zipArchive \"$dir\\app-64.7z\" \"$dir\" -Removal"
     ],
     "post_install": [
-        "Remove-Item \"$dir\\`$PLUGINSDIR\" -Force -Recurse -ErrorAction SilentlyContinue"
+        "Remove-Item \"$dir\\`$*\" -Force -Recurse -ErrorAction SilentlyContinue"
     ],
     "bin": "SPlayer-Next.exe",
     "shortcuts": [
