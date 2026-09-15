@@ -17,7 +17,19 @@
     ],
     "post_install": [
         "Remove-Item -LiteralPath \"$dir\\`$PLUGINSDIR\" -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item -LiteralPath \"$dir\\[NSIS].nsi\" -Force -ErrorAction SilentlyContinue"
+        "Remove-Item -LiteralPath \"$dir\\[NSIS].nsi\" -Force -ErrorAction SilentlyContinue",
+        "New-Item -Path 'HKCU:\\Software\\Classes\\QuilliteMarkdown.md' -Force | Out-Null",
+        "Set-ItemProperty -Path 'HKCU:\\Software\\Classes\\QuilliteMarkdown.md' -Name '(Default)' -Value 'Quillite Markdown Document'",
+        "New-Item -Path 'HKCU:\\Software\\Classes\\QuilliteMarkdown.md\\DefaultIcon' -Force | Out-Null",
+        "Set-ItemProperty -Path 'HKCU:\\Software\\Classes\\QuilliteMarkdown.md\\DefaultIcon' -Name '(Default)' -Value \"$dir\\QuilliteMarkdown.exe,0\"",
+        "New-Item -Path 'HKCU:\\Software\\Classes\\QuilliteMarkdown.md\\shell\\open\\command' -Force | Out-Null",
+        "Set-ItemProperty -Path 'HKCU:\\Software\\Classes\\QuilliteMarkdown.md\\shell\\open\\command' -Name '(Default)' -Value \"`\"$dir\\QuilliteMarkdown.exe`\" `\"%1`\"\"",
+        "New-Item -Path 'HKCU:\\Software\\Classes\\.md\\OpenWithProgids' -Force | Out-Null",
+        "New-ItemProperty -Path 'HKCU:\\Software\\Classes\\.md\\OpenWithProgids' -Name 'QuilliteMarkdown.md' -Value '' -PropertyType String -Force | Out-Null"
+    ],
+    "post_uninstall": [
+        "Remove-Item -Path 'HKCU:\\Software\\Classes\\QuilliteMarkdown.md' -Recurse -Force -ErrorAction SilentlyContinue",
+        "Remove-ItemProperty -Path 'HKCU:\\Software\\Classes\\.md\\OpenWithProgids' -Name 'QuilliteMarkdown.md' -Force -ErrorAction SilentlyContinue"
     ],
     "checkver": {
         "github": "https://github.com/liuhang798/quillite-markdown"
