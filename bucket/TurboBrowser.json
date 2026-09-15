@@ -1,12 +1,12 @@
 {
-    "version": "152.0.7977.121",
+    "version": "152.0.7977.122",
     "description": "Turbo Browser",
     "homepage": "https://www.tbrowser.cn/",
     "license": {
         "identifier": "Freeware",
         "url": "https://www.tbrowser.cn/"
     },
-    "url": "https://dl.tbrowser.cn/download/Turbo_152.0.7977.121_portable.7z",
+    "url": "https://dl.tbrowser.cn/download/Turbo_152.0.7977.122_portable.7z",
     "hash": "",
     "extract_dir": "",
     "bin": "turbo.exe",
