@@ -21,10 +21,9 @@
         ]
     ],
     "checkver": {
-        "url": "https://github.com/demoshang/siyuan-patch/releases",
-        "regex": "/releases/tag/v(?<version>.+?)\""
+        "github": "https://github.com/demoshang/siyuan-patch"
     },
     "autoupdate": {
-        "url": "https://github.com/demoshang/siyuan-patch/releases/download/v$version/siyuan-v$version-win.exe#/dl.7z"
+        "url": "https://github.com/demoshang/siyuan-patch/releases/download/v$version/siyuan-$version-win.exe#/dl.7z"
     }
 }
