@@ -1,0 +1,29 @@
+{
+    "version": "2.7.4",
+    "description": "轻量、本地优先的 Markdown 阅读器与编辑器",
+    "homepage": "https://github.com/liuhang798/quillite-markdown",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/liuhang798/quillite-markdown/releases/download/v2.7.4/quillite-markdown-2.7.4-windows-amd64.exe#/quillite-markdown-2.7.4.7z",
+        }
+    },
+    "extract_dir": "",
+    "bin": "QuilliteMarkdown.exe",
+    "shortcuts": [
+        [
+            "QuilliteMarkdown.exe",
+            "Quillite Markdown"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/liuhang798/quillite-markdown"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/liuhang798/quillite-markdown/releases/download/v$version/quillite-markdown-$version-windows-amd64.exe#/quillite-markdown-$version.7z"
+            }
+        }
+    }
+}
