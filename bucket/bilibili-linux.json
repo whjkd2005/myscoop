@@ -24,14 +24,13 @@
         "Remove-Item \"$dir\\bilibili-*.exe\" -Force",
         "Remove-Item \"$dir\\Uninstall*\" -Recurse -Force -ErrorAction SilentlyContinue"
     ],
-    "checkver": {
-        "url": "https://github.com/msojocs/bilibili-linux/releases",
-        "regex": "/releases/tag/v(?<version>[\\d.-]+)\""
-    },
+"checkver": {
+    "github": "https://github.com/msojocs/bilibili-linux"
+}
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$version-x64.exe"
+                "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$matchVersion-x64.exe"
             }
         },
         "hash": {
