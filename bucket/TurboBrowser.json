@@ -18,8 +18,8 @@
     ],
     "persist": "User Data",
     "checkver": {
-        "url": "https://www.tbrowser.cn/",
-        "regex": "Turbo_([\\d.]+)_portable\\.7z"
+        "url": "https://tbrowser.cn/zh/guide/changelog.html",
+        "regex": "##\\s+([\\d.]+)"
     },
     "autoupdate": {
         "url": "https://dl.tbrowser.cn/download/Turbo_$version_portable.7z"
