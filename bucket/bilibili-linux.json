@@ -1,3 +1,4 @@
+```json
 {
     "version": "1.18.0-1",
     "description": "基于哔哩哔哩官方客户端移植的Linux版本 支持漫游",
@@ -6,7 +7,7 @@
     "depends": "scoop-apps/7zip",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.18.0-1/bilibili-1.18.0-x64.exe",
+            "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.18.0-1/bilibili-1.18.0-x64.exe"
         }
     },
     "bin": "bilibili.exe",
@@ -24,17 +25,15 @@
         "Remove-Item \"$dir\\bilibili-*.exe\" -Force",
         "Remove-Item \"$dir\\Uninstall*\" -Recurse -Force -ErrorAction SilentlyContinue"
     ],
-"checkver": {
-    "github": "https://github.com/msojocs/bilibili-linux"
-}
+    "checkver": {
+        "github": "https://github.com/msojocs/bilibili-linux"
+    },
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$matchVersion-x64.exe"
+                "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$version-x64.exe"
             }
-        },
-        "hash": {
-            "url": "$url.sha256"
         }
     }
 }
+```
