@@ -5,9 +5,9 @@
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/liuhang798/quillite-markdown/releases/download/v2.7.4/quillite-markdown-2.7.4-windows-amd64.exe#/quillite-markdown-2.7.4.7z",
+            "url": "https://github.com/liuhang798/quillite-markdown/releases/download/v2.7.4/quillite-markdown-2.7.4-windows-amd64.exe#/quillite-markdown-2.7.4.7z"
         }
-    }
+    },
     "extract_dir": "",
     "bin": "QuilliteMarkdown.exe",
     "shortcuts": [
