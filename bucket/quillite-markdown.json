@@ -16,8 +16,8 @@
         ]
     ],
     "post_install": [
-        "Remove-Item \"$dir\\`$PLUGINSDIR\" -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item \"$dir\[NSIS].nsi\" -Force -ErrorAction SilentlyContinue"
+        "Remove-Item -LiteralPath \"$dir\\`$PLUGINSDIR\" -Recurse -Force -ErrorAction SilentlyContinue",
+        "Remove-Item -LiteralPath \"$dir\\[NSIS].nsi\" -Force -ErrorAction SilentlyContinue"
     ],
     "checkver": {
         "github": "https://github.com/liuhang798/quillite-markdown"
