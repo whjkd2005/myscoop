@@ -50,7 +50,6 @@ jobs:
               throw "Scoop installation failed: $scoopPs1"
           }
 
-          # 持久化 PATH，供后续 step 使用
           "$scoop\shims" |
               Out-File `
                   -FilePath $env:GITHUB_PATH `
@@ -158,6 +157,91 @@ jobs:
               )
 
               return $Template.Replace('$version', $Version)
+          }
+
+          # ========================================
+          # Parse checkver output
+          #
+          # Generic, line-by-line parsing.
+          #
+          # Returns a hashtable:
+          #   @{
+          #     Latest = <string or $null>
+          #     Current = <string or $null>
+          #   }
+          #
+          # Handles formats like:
+          #
+          #   app: 1.2.3 (scoop version is 1.2.2) autoupdate available
+          #   app: 1.2.3 (scoop version is 1.2.2)
+          #   app: 1.2.3
+          #   app: couldn't match ... in ...
+          #
+          # Works regardless of app name and bucket.
+          # ========================================
+
+          function Parse-CheckverOutput {
+              param(
+                  [Parameter(Mandatory = $true)]
+                  [string]$Output
+              )
+
+              $result = @{
+                  Latest  = $null
+                  Current = $null
+              }
+
+              # Normalize line endings and strip ANSI escape codes.
+              $clean =
+                  $Output -replace "`r`n", "`n" `
+                          -replace "`r", "`n" `
+                          -replace "\x1B\[[0-9;]*[A-Za-z]", ""
+
+              foreach ($rawLine in ($clean -split "`n")) {
+
+                  $line = $rawLine.Trim()
+
+                  if ([string]::IsNullOrWhiteSpace($line)) {
+                      continue
+                  }
+
+                  # Skip obvious non-result lines.
+                  if ($line -match "couldn't match") {
+                      continue
+                  }
+
+                  # Preferred form:
+                  #   <app>: <latest> (scoop version is <current>)
+                  $m = [regex]::Match(
+                      $line,
+                      '^[^:]+:\s*(?<latest>\S+)\s*\(scoop version is\s*(?<current>[^)]+?)\s*\)'
+                  )
+
+                  if ($m.Success) {
+                      $result.Latest  = $m.Groups['latest'].Value.Trim()
+                      $result.Current = $m.Groups['current'].Value.Trim()
+                      return $result
+                  }
+
+                  # Fallback form (no current version info):
+                  #   <app>: <latest>
+                  $m2 = [regex]::Match(
+                      $line,
+                      '^[^:]+:\s*(?<latest>\S+)\s*$'
+                  )
+
+                  if ($m2.Success) {
+                      $candidate = $m2.Groups['latest'].Value.Trim()
+
+                      # Only accept if it looks like a version number.
+                      if ($candidate -match '^[vV]?\d') {
+                          $result.Latest = $candidate
+                          return $result
+                      }
+                  }
+              }
+
+              return $result
           }
 
           # ========================================
@@ -324,8 +408,8 @@ jobs:
                   #
                   # NEVER use -Update.
                   #
-                  # -App 接受应用名（不含 .json），
-                  # 配合 -Dir 定位 manifest。
+                  # $name is the manifest base name (no .json),
+                  # which is what checkver -App expects.
                   # ----------------------------------------
 
                   $output =
@@ -338,38 +422,18 @@ jobs:
 
                   # ----------------------------------------
                   # 3. Parse checkver result
-                  #
-                  # Example:
-                  #
-                  # bilibili-linux: 1.19.0
-                  # (scoop version is 1.18.0-1)
-                  # autoupdate available
-                  #
                   # ----------------------------------------
 
-                  $latestVersion = $null
+                  $parsed =
+                      Parse-CheckverOutput -Output $output
 
-                  $availablePattern =
-                      '(?m)^\s*[^:\r\n]+:\s*([^\s]+)\s+\(scoop version is\s+([^)]+)\)'
+                  $latestVersion = $parsed.Latest
 
-                  $match =
-                      [regex]::Match(
-                          $output,
-                          $availablePattern
-                      )
-
-                  if ($match.Success) {
-
-                      $latestVersion =
-                          $match.Groups[1].Value.Trim()
-
-                      $detectedCurrentVersion =
-                          $match.Groups[2].Value.Trim()
-
+                  if (-not [string]::IsNullOrWhiteSpace($latestVersion)) {
                       Write-Host ""
                       Write-Host "Detected update:"
                       Write-Host "  Manifest : $name"
-                      Write-Host "  Current  : $detectedCurrentVersion"
+                      Write-Host "  Current  : $($parsed.Current)"
                       Write-Host "  Latest   : $latestVersion"
                   }
 
@@ -549,9 +613,7 @@ jobs:
           }
 
           # ========================================
-          # 把失败信息写入环境变量，
-          # 供后续 step 判断，但本 step 不抛出，
-          # 以便已成功更新的 manifest 仍可提交。
+          # Record failure flag for later steps
           # ========================================
 
           $hasFailure =
@@ -610,10 +672,7 @@ jobs:
           git push
 
       # ========================================
-      # Mark workflow as failed if any manifest failed
-      #
-      # 放在最后：既提交了成功部分，
-      # 又让整体状态反映失败。
+      # Fail workflow if any manifest failed
       # ========================================
 
       - name: Fail if any manifest failed
