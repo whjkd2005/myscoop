@@ -163,8 +163,11 @@ jobs:
           # Parse checkver output (generic)
           #
           # - accepts empty string safely
-          # - line-by-line parsing (no multi-line regex)
-          # - normalizes CRLF / strips ANSI
+          # - strips ANSI escape codes
+          # - folds line breaks into spaces
+          #   (Out-String may wrap the output
+          #    into multiple lines based on width)
+          # - then applies a single-line regex
           # ========================================
 
           function Parse-CheckverOutput {
@@ -182,50 +185,43 @@ jobs:
                   return $result
               }
 
+              # 1. Strip ANSI escape codes.
               $clean =
-                  $Output -replace "`r`n", "`n" `
-                          -replace "`r", "`n" `
-                          -replace "\x1B\[[0-9;]*[A-Za-z]", ""
+                  $Output -replace "\x1B\[[0-9;]*[A-Za-z]", ""
 
-              foreach ($rawLine in ($clean -split "`n")) {
+              # 2. Fold all line breaks into spaces so that
+              #    checkver fragments split across lines are
+              #    rejoined into a single line.
+              $clean =
+                  $clean -replace "`r`n", " " `
+                         -replace "`r", " " `
+                         -replace "`n", " "
 
-                  $line = $rawLine.Trim()
+              # 3. Collapse runs of whitespace into single spaces.
+              $clean = $clean -replace "\s+", " "
 
-                  if ([string]::IsNullOrWhiteSpace($line)) {
-                      continue
-                  }
+              # 4. Primary form:
+              #    <app>: <latest> (scoop version is <current>)
+              $m = [regex]::Match(
+                  $clean,
+                  '(?<app>[^\s:]+):\s*(?<latest>\S+)\s*\(scoop version is\s*(?<current>[^)]+?)\s*\)'
+              )
 
-                  if ($line -match "couldn't match") {
-                      continue
-                  }
+              if ($m.Success) {
+                  $result.Latest  = $m.Groups['latest'].Value.Trim()
+                  $result.Current = $m.Groups['current'].Value.Trim()
+                  return $result
+              }
 
-                  # Preferred form:
-                  #   <app>: <latest> (scoop version is <current>)
-                  $m = [regex]::Match(
-                      $line,
-                      '^[^:]+:\s*(?<latest>\S+)\s*\(scoop version is\s*(?<current>[^)]+?)\s*\)'
-                  )
+              # 5. Fallback form: <app>: <latest>
+              #    Only accept values that look like versions.
+              $m2 = [regex]::Match(
+                  $clean,
+                  '(?<app>[^\s:]+):\s*(?<latest>[vV]?\d[\w.\-]*)\b'
+              )
 
-                  if ($m.Success) {
-                      $result.Latest  = $m.Groups['latest'].Value.Trim()
-                      $result.Current = $m.Groups['current'].Value.Trim()
-                      return $result
-                  }
-
-                  # Fallback form: <app>: <latest>
-                  $m2 = [regex]::Match(
-                      $line,
-                      '^[^:]+:\s*(?<latest>\S+)\s*$'
-                  )
-
-                  if ($m2.Success) {
-                      $candidate = $m2.Groups['latest'].Value.Trim()
-
-                      if ($candidate -match '^[vV]?\d') {
-                          $result.Latest = $candidate
-                          return $result
-                      }
-                  }
+              if ($m2.Success) {
+                  $result.Latest = $m2.Groups['latest'].Value.Trim()
               }
 
               return $result
@@ -409,8 +405,9 @@ jobs:
                   #
                   # Capture host / information stream too:
                   #   PowerShell 7 routes Write-Host through
-                  #   the information stream (stream 6),
-                  #   so redirect 6>&1 as well.
+                  #   the information stream (stream 6).
+                  #
+                  # ONLY detect. NEVER use -Update.
                   # ----------------------------------------
 
                   $output =
