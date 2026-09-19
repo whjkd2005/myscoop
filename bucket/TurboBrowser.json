@@ -1,27 +1,27 @@
 {
-    "version": "152.0.7977.122",
-    "description": "Turbo Browser",
-    "homepage": "https://www.tbrowser.cn/",
-    "license": {
-        "identifier": "Freeware",
-        "url": "https://www.tbrowser.cn/"
-    },
-    "url": "https://dl.tbrowser.cn/download/Turbo_152.0.7977.122_portable.7z",
-    "hash": "",
-    "extract_dir": "",
-    "bin": "turbo.exe",
-    "shortcuts": [
-        [
-            "turbo.exe",
-            "Turbo Browser"
-        ]
-    ],
-    "persist": "User Data",
-    "checkver": {
-        "url": "https://tbrowser.cn/zh/guide/changelog.html",
-        "regex": "<h2 id=\"([\\d.]+)\""
-    },
-    "autoupdate": {
-        "url": "https://dl.tbrowser.cn/download/Turbo_$version_portable.7z"
-    }
+  "version": "152.0.7977.123",
+  "description": "Turbo Browser",
+  "homepage": "https://www.tbrowser.cn/",
+  "license": {
+    "identifier": "Freeware",
+    "url": "https://www.tbrowser.cn/"
+  },
+  "url": "https://dl.tbrowser.cn/download/Turbo_152.0.7977.123_portable.7z",
+  "hash": "",
+  "extract_dir": "",
+  "bin": "turbo.exe",
+  "shortcuts": [
+    [
+      "turbo.exe",
+      "Turbo Browser"
+    ]
+  ],
+  "persist": "User Data",
+  "checkver": {
+    "url": "https://tbrowser.cn/zh/guide/changelog.html",
+    "regex": "<h2 id=\"([\\d.]+)\""
+  },
+  "autoupdate": {
+    "url": "https://dl.tbrowser.cn/download/Turbo_$version_portable.7z"
+  }
 }
