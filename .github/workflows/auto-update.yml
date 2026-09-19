@@ -96,8 +96,29 @@ jobs:
               throw "checkver.ps1 not found: $checkver"
           }
 
+          # ========================================
+          # Skip list
+          #
+          # Manifests that must NOT be auto-updated.
+          #
+          # Reasons for skipping:
+          #   - tag and file name use different version
+          #     strings (e.g. bilibili-linux: tag v1.19.0-1
+          #     but file bilibili-1.19.0-x64.exe)
+          #   - pre-release / suffixed versions
+          #   - manual edits required
+          #
+          # Add more entries as needed. Matching is by
+          # manifest base name (file name without .json).
+          # ========================================
+
+          $skipList = @(
+              "bilibili-linux"
+          )
+
           Write-Host "========================================"
           Write-Host "Scoop bucket: $bucketDir"
+          Write-Host "Skip list   : $($skipList -join ', ')"
           Write-Host "========================================"
 
           $manifests = @(
@@ -116,6 +137,7 @@ jobs:
           $failed = @()
           $updated = @()
           $unchanged = @()
+          $skipped = @()
 
           # ========================================
           # Get JSON property safely
@@ -189,9 +211,7 @@ jobs:
               $clean =
                   $Output -replace "\x1B\[[0-9;]*[A-Za-z]", ""
 
-              # 2. Fold all line breaks into spaces so that
-              #    checkver fragments split across lines are
-              #    rejoined into a single line.
+              # 2. Fold all line breaks into spaces.
               $clean =
                   $clean -replace "`r`n", " " `
                          -replace "`r", " " `
@@ -214,7 +234,6 @@ jobs:
               }
 
               # 5. Fallback form: <app>: <latest>
-              #    Only accept values that look like versions.
               $m2 = [regex]::Match(
                   $clean,
                   '(?<app>[^\s:]+):\s*(?<latest>[vV]?\d[\w.\-]*)\b'
@@ -377,6 +396,18 @@ jobs:
               Write-Host "----------------------------------------"
               Write-Host "Checking: $name"
               Write-Host "----------------------------------------"
+
+              # ----------------------------------------
+              # Skip list check
+              # ----------------------------------------
+
+              if ($skipList -contains $name) {
+                  Write-Host "SKIPPED: $name (in skip list)"
+
+                  $skipped += $name
+
+                  continue
+              }
 
               try {
 
@@ -576,6 +607,7 @@ jobs:
 
           Write-Host "Updated   : $($updated.Count)"
           Write-Host "Unchanged : $($unchanged.Count)"
+          Write-Host "Skipped   : $($skipped.Count)"
           Write-Host "Failed    : $($failed.Count)"
           Write-Host "JSON fail : $($jsonFailed.Count)"
 
@@ -585,6 +617,17 @@ jobs:
               Write-Host "Updated manifests:"
 
               $updated |
+                  ForEach-Object {
+                      Write-Host "  - $_"
+                  }
+          }
+
+          if ($skipped.Count -gt 0) {
+
+              Write-Host ""
+              Write-Host "Skipped manifests:"
+
+              $skipped |
                   ForEach-Object {
                       Write-Host "  - $_"
                   }
