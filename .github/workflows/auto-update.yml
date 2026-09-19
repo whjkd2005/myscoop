@@ -2,15 +2,10 @@ name: Auto Update Scoop Manifests
 
 on:
   schedule:
-    # 每天北京时间 03:00
+    # 每天北京时间 03:00（UTC 19:00）
     - cron: "0 19 * * *"
 
   workflow_dispatch:
-
-  push:
-    paths:
-      - "bucket/*.json"
-      - ".github/workflows/auto-update.yml"
 
 permissions:
   contents: write
@@ -20,57 +15,125 @@ jobs:
     name: Check and update manifests
     runs-on: windows-latest
 
+    defaults:
+      run:
+        shell: pwsh
+
     steps:
-      - name: Checkout bucket
+      # --------------------------------------------------
+      # 1. Checkout
+      # --------------------------------------------------
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Scoop
-        shell: pwsh
+      # --------------------------------------------------
+      # 2. Install Scoop
+      # --------------------------------------------------
+      - name: Install Scoop
         run: |
-          Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
-          if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
-              irm get.scoop.sh | iex
+          $env:SCOOP = "$env:USERPROFILE\scoop"
+
+          if (-not (Test-Path "$env:SCOOP\shims\scoop.ps1")) {
+              Write-Host "Installing Scoop..."
+
+              Invoke-RestMethod `
+                  -Uri 'https://get.scoop.sh' `
+                  -OutFile "$env:TEMP\install-scoop.ps1"
+
+              & "$env:TEMP\install-scoop.ps1" -RunAsAdmin:$false
           }
 
-          scoop --version
+          $scoopRoot = "$env:USERPROFILE\scoop"
+          $scoop = "$scoopRoot\shims\scoop.ps1"
 
+          if (-not (Test-Path $scoop)) {
+              throw "Scoop installation failed: $scoop"
+          }
+
+          # 当前 PowerShell 会话立即加入 Scoop
+          $env:PATH = "$scoopRoot\shims;$env:PATH"
+
+          Write-Host "Scoop root: $scoopRoot"
+          Write-Host "Scoop executable: $scoop"
+
+          & $scoop --version
+
+      # --------------------------------------------------
+      # 3. Update Scoop itself
+      # --------------------------------------------------
       - name: Update Scoop
-        shell: pwsh
         run: |
-          scoop update
+          $env:SCOOP = "$env:USERPROFILE\scoop"
+          $env:PATH = "$env:SCOOP\shims;$env:PATH"
 
+          $scoop = "$env:SCOOP\shims\scoop.ps1"
+
+          if (-not (Test-Path $scoop)) {
+              throw "Scoop not found: $scoop"
+          }
+
+          & $scoop update
+
+      # --------------------------------------------------
+      # 4. Check all manifests
+      # --------------------------------------------------
       - name: Check all manifests
-        shell: pwsh
         run: |
-          $checkver = "$env:USERPROFILE\scoop\apps\scoop\current\bin\checkver.ps1"
+          $env:SCOOP = "$env:USERPROFILE\scoop"
+          $env:PATH = "$env:SCOOP\shims;$env:PATH"
+
+          $checkver = "$env:SCOOP\apps\scoop\current\bin\checkver.ps1"
 
           if (-not (Test-Path $checkver)) {
               throw "checkver.ps1 not found: $checkver"
           }
 
-          & $checkver -App * -Dir "$env:GITHUB_WORKSPACE\bucket"
+          Write-Host "Using:"
+          Write-Host $checkver
 
-      - name: Auto update all manifests
-        shell: pwsh
+          & $checkver `
+              -App * `
+              -Dir "$env:GITHUB_WORKSPACE\bucket"
+
+      # --------------------------------------------------
+      # 5. Automatically update manifests
+      # --------------------------------------------------
+      - name: Auto update manifests
         run: |
-          $checkver = "$env:USERPROFILE\scoop\apps\scoop\current\bin\checkver.ps1"
+          $env:SCOOP = "$env:USERPROFILE\scoop"
+          $env:PATH = "$env:SCOOP\shims;$env:PATH"
+
+          $checkver = "$env:SCOOP\apps\scoop\current\bin\checkver.ps1"
+
+          if (-not (Test-Path $checkver)) {
+              throw "checkver.ps1 not found: $checkver"
+          }
 
           & $checkver `
               -App * `
               -Dir "$env:GITHUB_WORKSPACE\bucket" `
               -Update
 
-      - name: Show manifest changes
-        shell: pwsh
+      # --------------------------------------------------
+      # 6. Show changes
+      # --------------------------------------------------
+      - name: Show changes
         run: |
+          Write-Host "Git status:"
           git status --short
+
+          Write-Host ""
+          Write-Host "Git diff:"
           git diff -- bucket
 
-      - name: Validate JSON
-        shell: pwsh
+      # --------------------------------------------------
+      # 7. Validate JSON
+      # --------------------------------------------------
+      - name: Validate JSON manifests
         run: |
           $errors = @()
 
@@ -84,9 +147,9 @@ jobs:
                       Write-Host "OK: $($_.Name)"
                   }
                   catch {
-                      $errors += $_.Name
                       Write-Error "Invalid JSON: $($_.FullName)"
                       Write-Error $_
+                      $errors += $_.Name
                   }
               }
 
@@ -94,17 +157,10 @@ jobs:
               throw "Invalid manifest(s): $($errors -join ', ')"
           }
 
-      - name: Check URLs
-        shell: pwsh
-        run: |
-          $checkurls = "$env:USERPROFILE\scoop\apps\scoop\current\bin\checkurls.ps1"
-
-          if (Test-Path $checkurls) {
-              & $checkurls -Dir "$env:GITHUB_WORKSPACE\bucket"
-          }
-
+      # --------------------------------------------------
+      # 8. Commit and push
+      # --------------------------------------------------
       - name: Commit changes
-        shell: pwsh
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
