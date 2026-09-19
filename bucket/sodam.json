@@ -5,14 +5,13 @@
     "license": "AGPL-3.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/sodahub-org/sodam/releases/download/v0.1.2/sodam-0.1.2-windows-x64-setup.exe",
-            "hash": ""
+            "url": "https://github.com/sodahub-org/sodam/releases/download/v0.1.2/sodam-0.1.2-windows-x64-setup.exe"
         }
     },
     "innosetup": true,
     "shortcuts": [
-    ["sodam.exe", "SodaM"]
-]
+        ["sodam.exe", "SodaM"]
+    ],
     "checkver": {
         "github": "https://github.com/sodahub-org/sodam"
     },
