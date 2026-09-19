@@ -162,15 +162,14 @@ jobs:
           # ========================================
           # Parse checkver output (generic)
           #
-          # Line-by-line parsing, no multi-line regex,
-          # no reliance on Out-String behavior.
-          #
-          # Returns @{ Latest = ...; Current = ... }
+          # - accepts empty string safely
+          # - line-by-line parsing (no multi-line regex)
+          # - normalizes CRLF / strips ANSI
           # ========================================
 
           function Parse-CheckverOutput {
               param(
-                  [Parameter(Mandatory = $true)]
+                  [AllowEmptyString()]
                   [string]$Output
               )
 
@@ -179,7 +178,10 @@ jobs:
                   Current = $null
               }
 
-              # Normalize line endings and strip ANSI escape codes.
+              if ([string]::IsNullOrEmpty($Output)) {
+                  return $result
+              }
+
               $clean =
                   $Output -replace "`r`n", "`n" `
                           -replace "`r", "`n" `
@@ -193,7 +195,6 @@ jobs:
                       continue
                   }
 
-                  # Skip obvious non-result lines.
                   if ($line -match "couldn't match") {
                       continue
                   }
@@ -211,8 +212,7 @@ jobs:
                       return $result
                   }
 
-                  # Fallback form (no current version info):
-                  #   <app>: <latest>
+                  # Fallback form: <app>: <latest>
                   $m2 = [regex]::Match(
                       $line,
                       '^[^:]+:\s*(?<latest>\S+)\s*$'
@@ -221,7 +221,6 @@ jobs:
                   if ($m2.Success) {
                       $candidate = $m2.Groups['latest'].Value.Trim()
 
-                      # Only accept if it looks like a version number.
                       if ($candidate -match '^[vV]?\d') {
                           $result.Latest = $candidate
                           return $result
@@ -258,7 +257,6 @@ jobs:
                   return $false
               }
 
-              # ---- Diagnostic output ----
               Write-Host "  [debug] autoupdate keys : $($auto.PSObject.Properties.Name -join ', ')"
 
               $autoUrlType =
@@ -271,14 +269,11 @@ jobs:
               Write-Host "  [debug] autoupdate.url  : type=$autoUrlType value=$($auto.url)"
               Write-Host "  [debug] manifest keys   : $($Manifest.PSObject.Properties.Name -join ', ')"
               Write-Host "  [debug] manifest.url    : $($Manifest.url)"
-              # ---- End diagnostic ----
 
               $changed = $false
 
               # ----------------------------------------
               # Simple manifest
-              #
-              # autoupdate.url
               # ----------------------------------------
 
               $autoUrl =
@@ -412,15 +407,19 @@ jobs:
                   # ----------------------------------------
                   # 2. checkver
                   #
-                  # ONLY detect. NEVER use -Update.
+                  # Capture host / information stream too:
+                  #   PowerShell 7 routes Write-Host through
+                  #   the information stream (stream 6),
+                  #   so redirect 6>&1 as well.
                   # ----------------------------------------
 
                   $output =
                       & $checkver `
                           -App $name `
-                          -Dir $bucketDir 2>&1 |
+                          -Dir $bucketDir 6>&1 2>&1 |
                           Out-String
 
+                  Write-Host "  [debug] checkver output length = $($output.Length)"
                   Write-Host $output
 
                   # ----------------------------------------
@@ -524,11 +523,6 @@ jobs:
                   $updated += $name
               }
               catch {
-
-                  # NOTE:
-                  # $ErrorActionPreference = 'Stop' makes Write-Error
-                  # itself throw, which would abort this catch block.
-                  # Use Write-Host for diagnostics here.
 
                   Write-Host ""
                   Write-Host "FAILED: $name" -ForegroundColor Red
