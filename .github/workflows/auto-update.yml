@@ -13,7 +13,6 @@ jobs:
 update-manifests:
 runs-on: windows-latest
 
-```
 steps:
   # ========================================
   # Checkout
