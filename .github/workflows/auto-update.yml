@@ -1,4 +1,3 @@
-```yaml
 name: Auto Update Scoop Manifests
 
 on:
@@ -121,4 +120,3 @@ jobs:
 
           git commit -m "Update manifests ($date)"
           git push
-```
