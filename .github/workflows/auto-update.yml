@@ -1,481 +1,592 @@
 name: Update Scoop Manifests
 
 on:
-  workflow_dispatch:
-  schedule:
-    # 每天北京时间 03:00
-    - cron: "0 19 * * *"
+workflow_dispatch:
+schedule:
+# 每天北京时间 03:00
+- cron: "0 19 * * *"
 
 permissions:
-  contents: write
+contents: write
 
 jobs:
-  update-manifests:
-    runs-on: windows-latest
+update-manifests:
+runs-on: windows-latest
 
-    steps:
-      - name: Checkout bucket
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+```
+steps:
+  # ========================================
+  # Checkout
+  # ========================================
 
-      - name: Install Scoop
-        shell: pwsh
-        run: |
-          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+  - name: Checkout bucket
+    uses: actions/checkout@v4
+    with:
+      fetch-depth: 0
 
-          if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
-              Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
-          }
+  # ========================================
+  # Install Scoop
+  # ========================================
 
-          $scoop = "$env:USERPROFILE\scoop"
+  - name: Install Scoop
+    shell: pwsh
+    run: |
+      $ErrorActionPreference = 'Stop'
 
-          if (-not (Test-Path "$scoop\shims\scoop.ps1")) {
-              throw "Scoop installation failed."
-          }
+      Set-ExecutionPolicy `
+          -ExecutionPolicy RemoteSigned `
+          -Scope CurrentUser `
+          -Force
 
-          $env:PATH = "$scoop\shims;$env:PATH"
+      if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+          Invoke-RestMethod `
+              -Uri "https://get.scoop.sh" |
+              Invoke-Expression
+      }
 
-          & "$scoop\shims\scoop.ps1" --version
+      $scoop = "$env:USERPROFILE\scoop"
+      $scoopPs1 = "$scoop\shims\scoop.ps1"
 
-      - name: Update Scoop
-        shell: pwsh
-        run: |
-          $scoop = "$env:USERPROFILE\scoop"
-          $scoopPs1 = "$scoop\shims\scoop.ps1"
+      if (-not (Test-Path $scoopPs1)) {
+          throw "Scoop installation failed: $scoopPs1"
+      }
 
-          & $scoopPs1 update
+      $env:PATH = "$scoop\shims;$env:PATH"
 
-      - name: Detect and update manifests
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = 'Stop'
+      Write-Host "Scoop:"
+      & $scoopPs1 --version
 
-          $bucketDir = "$env:GITHUB_WORKSPACE\bucket"
-          $scoop = "$env:USERPROFILE\scoop"
-          $checkver = "$scoop\apps\scoop\current\bin\checkver.ps1"
+  # ========================================
+  # Update Scoop itself
+  # ========================================
 
-          if (-not (Test-Path $bucketDir)) {
-              throw "Bucket directory not found: $bucketDir"
-          }
+  - name: Update Scoop
+    shell: pwsh
+    run: |
+      $ErrorActionPreference = 'Stop'
 
-          if (-not (Test-Path $checkver)) {
-              throw "checkver.ps1 not found: $checkver"
-          }
+      $scoop = "$env:USERPROFILE\scoop"
+      $scoopPs1 = "$scoop\shims\scoop.ps1"
 
-          Write-Host "========================================"
-          Write-Host "Scoop bucket: $bucketDir"
-          Write-Host "========================================"
+      & $scoopPs1 update
 
-          $manifests = Get-ChildItem `
+  # ========================================
+  # Detect and update manifests
+  # ========================================
+
+  - name: Detect and update manifests
+    shell: pwsh
+    run: |
+      $ErrorActionPreference = 'Stop'
+
+      $bucketDir = "$env:GITHUB_WORKSPACE\bucket"
+      $scoop = "$env:USERPROFILE\scoop"
+      $checkver = "$scoop\apps\scoop\current\bin\checkver.ps1"
+
+      if (-not (Test-Path $bucketDir)) {
+          throw "Bucket directory not found: $bucketDir"
+      }
+
+      if (-not (Test-Path $checkver)) {
+          throw "checkver.ps1 not found: $checkver"
+      }
+
+      Write-Host "========================================"
+      Write-Host "Scoop bucket: $bucketDir"
+      Write-Host "========================================"
+
+      $manifests = @(
+          Get-ChildItem `
               -Path $bucketDir `
               -Filter "*.json" `
               -File |
               Sort-Object Name
+      )
 
-          if ($manifests.Count -eq 0) {
-              Write-Host "No manifests found."
-              exit 0
+      if ($manifests.Count -eq 0) {
+          Write-Host "No manifests found."
+          exit 0
+      }
+
+      $failed = @()
+      $updated = @()
+      $unchanged = @()
+
+      # ========================================
+      # Get JSON property safely
+      # ========================================
+
+      function Get-PropertyValue {
+          param(
+              [Parameter(Mandatory = $true)]
+              $Object,
+
+              [Parameter(Mandatory = $true)]
+              [string]$Name
+          )
+
+          if ($null -eq $Object) {
+              return $null
           }
 
-          $failed = @()
-          $updated = @()
-          $unchanged = @()
+          $property = $Object.PSObject.Properties[$Name]
 
-          function Get-PropertyValue {
-              param(
-                  [Parameter(Mandatory)]
-                  $Object,
-
-                  [Parameter(Mandatory)]
-                  [string]$Name
-              )
-
-              if ($null -eq $Object) {
-                  return $null
-              }
-
-              $property = $Object.PSObject.Properties[$Name]
-
-              if ($null -eq $property) {
-                  return $null
-              }
-
-              return $property.Value
+          if ($null -eq $property) {
+              return $null
           }
 
-          function Expand-AutoUpdateUrl {
-              param(
-                  [Parameter(Mandatory)]
-                  [string]$Template,
+          return $property.Value
+      }
 
-                  [Parameter(Mandatory)]
-                  [string]$Version
-              )
+      # ========================================
+      # Replace $version
+      # ========================================
 
-              # 当前 bucket 主要使用 $version。
-              # 保留 URL fragment，例如 #/dl.7z。
-              $result = $Template
+      function Expand-AutoUpdateUrl {
+          param(
+              [Parameter(Mandatory = $true)]
+              [string]$Template,
 
-              $result = $result.Replace('$version', $Version)
+              [Parameter(Mandatory = $true)]
+              [string]$Version
+          )
 
-              return $result
+          return $Template.Replace('$version', $Version)
+      }
+
+      # ========================================
+      # Update URL only
+      #
+      # IMPORTANT:
+      # hash is NEVER touched.
+      # ========================================
+
+      function Update-ManifestUrl {
+          param(
+              [Parameter(Mandatory = $true)]
+              $Manifest,
+
+              [Parameter(Mandatory = $true)]
+              [string]$Version
+          )
+
+          $auto =
+              Get-PropertyValue `
+                  -Object $Manifest `
+                  -Name "autoupdate"
+
+          if ($null -eq $auto) {
+              return $false
           }
 
-          function Update-ManifestUrl {
-              param(
-                  [Parameter(Mandatory)]
-                  $Manifest,
+          $changed = $false
 
-                  [Parameter(Mandatory)]
-                  [string]$Version
-              )
+          # ----------------------------------------
+          # Simple manifest
+          #
+          # autoupdate.url
+          # ----------------------------------------
 
-              $auto = Get-PropertyValue $Manifest "autoupdate"
+          $autoUrl =
+              Get-PropertyValue `
+                  -Object $auto `
+                  -Name "url"
 
-              if ($null -eq $auto) {
-                  return $false
-              }
+          if ($autoUrl -is [string]) {
 
-              $changed = $false
-
-              # ----------------------------------------
-              # 普通 manifest:
-              #
-              # "url": "...",
-              # "autoupdate": {
-              #     "url": "..."
-              # }
-              # ----------------------------------------
-
-              $autoUrl = Get-PropertyValue $auto "url"
-
-              if ($autoUrl -is [string]) {
-                  $newUrl = Expand-AutoUpdateUrl `
+              $newUrl =
+                  Expand-AutoUpdateUrl `
                       -Template $autoUrl `
                       -Version $Version
 
-                  if ($newUrl -ne $Manifest.url) {
-                      $Manifest.url = $newUrl
-                      $changed = $true
-                  }
-
-                  return $changed
-              }
-
-              # ----------------------------------------
-              # architecture:
-              #
-              # "architecture": {
-              #   "64bit": {
-              #     "url": "..."
-              #   }
-              # },
-              #
-              # "autoupdate": {
-              #   "architecture": {
-              #     "64bit": {
-              #       "url": "..."
-              #     }
-              #   }
-              # }
-              # ----------------------------------------
-
-              $autoArchitecture = Get-PropertyValue $auto "architecture"
-
-              if ($null -eq $autoArchitecture) {
-                  return $changed
-              }
-
-              $manifestArchitecture =
-                  Get-PropertyValue $Manifest "architecture"
-
-              if ($null -eq $manifestArchitecture) {
-                  return $changed
-              }
-
-              foreach ($archProperty in $autoArchitecture.PSObject.Properties) {
-                  $archName = $archProperty.Name
-                  $archAuto = $archProperty.Value
-
-                  $archAutoUrl =
-                      Get-PropertyValue $archAuto "url"
-
-                  if ($archAutoUrl -isnot [string]) {
-                      continue
-                  }
-
-                  $archManifest =
-                      Get-PropertyValue $manifestArchitecture $archName
-
-                  if ($null -eq $archManifest) {
-                      continue
-                  }
-
-                  $newUrl = Expand-AutoUpdateUrl `
-                      -Template $archAutoUrl `
-                      -Version $Version
-
-                  $oldUrl =
-                      Get-PropertyValue $archManifest "url"
-
-                  if ($oldUrl -ne $newUrl) {
-                      $archManifest.url = $newUrl
-                      $changed = $true
-                  }
+              if ($newUrl -ne $Manifest.url) {
+                  $Manifest.url = $newUrl
+                  $changed = $true
               }
 
               return $changed
           }
 
-          foreach ($file in $manifests) {
+          # ----------------------------------------
+          # Architecture manifest
+          # ----------------------------------------
 
-              $name = $file.BaseName
+          $autoArchitecture =
+              Get-PropertyValue `
+                  -Object $auto `
+                  -Name "architecture"
 
-              Write-Host ""
-              Write-Host "----------------------------------------"
-              Write-Host "Checking: $name"
-              Write-Host "----------------------------------------"
+          if ($null -eq $autoArchitecture) {
+              return $false
+          }
 
-              try {
-                  # ----------------------------------------
-                  # 1. 读取原始 JSON
-                  # ----------------------------------------
+          $manifestArchitecture =
+              Get-PropertyValue `
+                  -Object $Manifest `
+                  -Name "architecture"
 
-                  $jsonText = Get-Content `
+          if ($null -eq $manifestArchitecture) {
+              return $false
+          }
+
+          foreach ($archProperty in $autoArchitecture.PSObject.Properties) {
+
+              $archName = $archProperty.Name
+              $archAuto = $archProperty.Value
+
+              $archAutoUrl =
+                  Get-PropertyValue `
+                      -Object $archAuto `
+                      -Name "url"
+
+              if ($archAutoUrl -isnot [string]) {
+                  continue
+              }
+
+              $archManifest =
+                  Get-PropertyValue `
+                      -Object $manifestArchitecture `
+                      -Name $archName
+
+              if ($null -eq $archManifest) {
+                  continue
+              }
+
+              $newUrl =
+                  Expand-AutoUpdateUrl `
+                      -Template $archAutoUrl `
+                      -Version $Version
+
+              $oldUrl =
+                  Get-PropertyValue `
+                      -Object $archManifest `
+                      -Name "url"
+
+              if ($oldUrl -ne $newUrl) {
+                  $archManifest.url = $newUrl
+                  $changed = $true
+              }
+          }
+
+          return $changed
+      }
+
+      # ========================================
+      # Process every manifest
+      # ========================================
+
+      foreach ($file in $manifests) {
+
+          $name = $file.BaseName
+
+          Write-Host ""
+          Write-Host "----------------------------------------"
+          Write-Host "Checking: $name"
+          Write-Host "----------------------------------------"
+
+          try {
+
+              # ----------------------------------------
+              # 1. Read manifest
+              # ----------------------------------------
+
+              $jsonText =
+                  Get-Content `
                       -LiteralPath $file.FullName `
                       -Raw `
                       -Encoding UTF8
 
-                  $manifest =
-                      $jsonText | ConvertFrom-Json
+              $manifest =
+                  $jsonText | ConvertFrom-Json
 
-                  $currentVersion =
-                      [string]$manifest.version
+              $currentVersion =
+                  [string]$manifest.version
 
-                  if ([string]::IsNullOrWhiteSpace($currentVersion)) {
-                      throw "Manifest does not contain a valid version."
-                  }
+              if ([string]::IsNullOrWhiteSpace($currentVersion)) {
+                  throw "Manifest does not contain a valid version."
+              }
 
-                  # ----------------------------------------
-                  # 2. checkver 只检测版本
-                  #
-                  #    绝不使用 -Update
-                  # ----------------------------------------
+              # ----------------------------------------
+              # 2. checkver
+              #
+              # ONLY detect.
+              #
+              # NEVER use -Update.
+              # ----------------------------------------
 
-                  $output = & $checkver `
+              $output =
+                  & $checkver `
                       -App $file.FullName `
                       -Dir $bucketDir 2>&1 |
                       Out-String
 
-                  Write-Host $output
+              Write-Host $output
 
-                  # ----------------------------------------
-                  # 3. 从 checkver 输出取得最新版本
-                  #
-                  # 典型输出：
-                  #
-                  # app: 1.2.3
-                  # 或
-                  # app: 1.2.3 (scoop version is 1.2.2)
-                  # ----------------------------------------
+              # ----------------------------------------
+              # 3. Parse checkver result
+              #
+              # Example:
+              #
+              # bilibili-linux: 1.19.0
+              # (scoop version is 1.18.0-1)
+              # autoupdate available
+              #
+              # ----------------------------------------
 
-                  $latestVersion = $null
+              $latestVersion = $null
 
-                  $patterns = @(
-                      "(?m)^\s*$([regex]::Escape($name)):\s*([0-9][0-9A-Za-z._+-]*)\s+\(scoop version",
-                      "(?m)^\s*$([regex]::Escape($name)):\s*([0-9][0-9A-Za-z._+-]*)\s*$"
+              $availablePattern =
+                  '(?m)^\s*[^:\r\n]+:\s*([^\s]+)\s+\(scoop version is\s+([^)]+)\)'
+
+              $match =
+                  [regex]::Match(
+                      $output,
+                      $availablePattern
                   )
 
-                  foreach ($pattern in $patterns) {
-                      $match = [regex]::Match($output, $pattern)
+              if ($match.Success) {
 
-                      if ($match.Success) {
-                          $latestVersion = $match.Groups[1].Value
-                          break
-                      }
-                  }
+                  $latestVersion =
+                      $match.Groups[1].Value.Trim()
 
-                  if ([string]::IsNullOrWhiteSpace($latestVersion)) {
-                      Write-Host "Could not determine a newer version."
-                      $unchanged += $name
-                      continue
-                  }
-
-                  Write-Host "Current version : $currentVersion"
-                  Write-Host "Latest version  : $latestVersion"
-
-                  # ----------------------------------------
-                  # 4. 没有新版本
-                  # ----------------------------------------
-
-                  if ($latestVersion -eq $currentVersion) {
-                      Write-Host "Already up to date."
-                      $unchanged += $name
-                      continue
-                  }
-
-                  # ----------------------------------------
-                  # 5. 检查 autoupdate
-                  # ----------------------------------------
-
-                  if ($null -eq $manifest.autoupdate) {
-                      throw "New version detected but autoupdate is missing."
-                  }
-
-                  # ----------------------------------------
-                  # 6. 修改 version
-                  # ----------------------------------------
-
-                  $manifest.version = $latestVersion
-
-                  # ----------------------------------------
-                  # 7. 只更新 URL
-                  #
-                  #    注意：
-                  #    不读取、不生成、不修改 hash
-                  # ----------------------------------------
-
-                  $urlChanged =
-                      Update-ManifestUrl `
-                          -Manifest $manifest `
-                          -Version $latestVersion
-
-                  if (-not $urlChanged) {
-                      throw "New version detected but no autoupdate URL could be generated."
-                  }
-
-                  # ----------------------------------------
-                  # 8. 写回 JSON
-                  # ----------------------------------------
-
-                  $newJson =
-                      $manifest |
-                      ConvertTo-Json -Depth 100
-
-                  # 确保 UTF-8 无 BOM
-                  [System.IO.File]::WriteAllText(
-                      $file.FullName,
-                      $newJson + [Environment]::NewLine,
-                      [System.Text.UTF8Encoding]::new($false)
-                  )
+                  $detectedCurrentVersion =
+                      $match.Groups[2].Value.Trim()
 
                   Write-Host ""
-                  Write-Host "UPDATED: $name"
-                  Write-Host "  $currentVersion -> $latestVersion"
-                  Write-Host "  URL updated"
-                  Write-Host "  HASH untouched"
-
-                  $updated += $name
+                  Write-Host "Detected update:"
+                  Write-Host "  Manifest : $name"
+                  Write-Host "  Current  : $detectedCurrentVersion"
+                  Write-Host "  Latest   : $latestVersion"
               }
-              catch {
-                  Write-Error "FAILED: $name"
-                  Write-Error $_.Exception.Message
 
-                  $failed += $name
+              # ----------------------------------------
+              # No update
+              # ----------------------------------------
+
+              if ([string]::IsNullOrWhiteSpace($latestVersion)) {
+
+                  Write-Host "No update available."
+
+                  $unchanged += $name
+
+                  continue
               }
+
+              Write-Host ""
+              Write-Host "Current version : $currentVersion"
+              Write-Host "Latest version  : $latestVersion"
+
+              # ----------------------------------------
+              # 4. Extra protection
+              # ----------------------------------------
+
+              if ($latestVersion -eq $currentVersion) {
+
+                  Write-Host "Already up to date."
+
+                  $unchanged += $name
+
+                  continue
+              }
+
+              # ----------------------------------------
+              # 5. autoupdate must exist
+              # ----------------------------------------
+
+              if ($null -eq $manifest.autoupdate) {
+                  throw "New version detected but autoupdate is missing."
+              }
+
+              # ----------------------------------------
+              # 6. Update version
+              # ----------------------------------------
+
+              $manifest.version = $latestVersion
+
+              # ----------------------------------------
+              # 7. Update URL
+              #
+              # ONLY version + URL are changed.
+              #
+              # hash is NOT read.
+              # hash is NOT calculated.
+              # hash is NOT modified.
+              # ----------------------------------------
+
+              $urlChanged =
+                  Update-ManifestUrl `
+                      -Manifest $manifest `
+                      -Version $latestVersion
+
+              if (-not $urlChanged) {
+                  throw `
+                      "New version detected but no autoupdate URL could be generated."
+              }
+
+              # ----------------------------------------
+              # 8. Write JSON
+              # ----------------------------------------
+
+              $newJson =
+                  $manifest |
+                  ConvertTo-Json -Depth 100
+
+              [System.IO.File]::WriteAllText(
+                  $file.FullName,
+                  $newJson + [Environment]::NewLine,
+                  [System.Text.UTF8Encoding]::new($false)
+              )
+
+              Write-Host ""
+              Write-Host "UPDATED: $name"
+              Write-Host "  Version : $currentVersion -> $latestVersion"
+              Write-Host "  URL     : updated"
+              Write-Host "  Hash    : untouched"
+
+              $updated += $name
           }
+          catch {
 
-          # ========================================
-          # JSON validation
-          # ========================================
+              Write-Error "FAILED: $name"
+              Write-Error $_.Exception.Message
+
+              $failed += $name
+          }
+      }
+
+      # ========================================
+      # JSON validation
+      # ========================================
+
+      Write-Host ""
+      Write-Host "========================================"
+      Write-Host "Validating JSON"
+      Write-Host "========================================"
+
+      $jsonFailed = @()
+
+      foreach ($file in $manifests) {
+
+          try {
+
+              Get-Content `
+                  -LiteralPath $file.FullName `
+                  -Raw `
+                  -Encoding UTF8 |
+                  ConvertFrom-Json |
+                  Out-Null
+
+              Write-Host "OK: $($file.Name)"
+          }
+          catch {
+
+              Write-Error "INVALID JSON: $($file.Name)"
+              Write-Error $_.Exception.Message
+
+              $jsonFailed += $file.BaseName
+          }
+      }
+
+      # ========================================
+      # Summary
+      # ========================================
+
+      Write-Host ""
+      Write-Host "========================================"
+      Write-Host "Update Summary"
+      Write-Host "========================================"
+
+      Write-Host "Updated   : $($updated.Count)"
+      Write-Host "Unchanged : $($unchanged.Count)"
+      Write-Host "Failed    : $($failed.Count)"
+      Write-Host "JSON fail : $($jsonFailed.Count)"
+
+      if ($updated.Count -gt 0) {
 
           Write-Host ""
-          Write-Host "========================================"
-          Write-Host "Validating JSON"
-          Write-Host "========================================"
+          Write-Host "Updated manifests:"
 
-          $jsonFailed = @()
-
-          foreach ($file in $manifests) {
-              try {
-                  Get-Content `
-                      -LiteralPath $file.FullName `
-                      -Raw `
-                      -Encoding UTF8 |
-                      ConvertFrom-Json |
-                      Out-Null
-
-                  Write-Host "OK: $($file.Name)"
+          $updated |
+              ForEach-Object {
+                  Write-Host "  - $_"
               }
-              catch {
-                  Write-Error "INVALID JSON: $($file.Name)"
-                  Write-Error $_.Exception.Message
+      }
 
-                  $jsonFailed += $file.BaseName
-              }
-          }
-
-          # ========================================
-          # Summary
-          # ========================================
+      if ($failed.Count -gt 0) {
 
           Write-Host ""
-          Write-Host "========================================"
-          Write-Host "Update Summary"
-          Write-Host "========================================"
+          Write-Host "Failed manifests:"
 
-          Write-Host "Updated   : $($updated.Count)"
-          Write-Host "Unchanged : $($unchanged.Count)"
-          Write-Host "Failed    : $($failed.Count)"
-          Write-Host "JSON fail : $($jsonFailed.Count)"
-
-          if ($updated.Count -gt 0) {
-              Write-Host ""
-              Write-Host "Updated manifests:"
-              $updated | ForEach-Object {
+          $failed |
+              ForEach-Object {
                   Write-Host "  - $_"
               }
-          }
+      }
 
-          if ($failed.Count -gt 0) {
-              Write-Host ""
-              Write-Host "Failed manifests:"
-              $failed | ForEach-Object {
+      if ($jsonFailed.Count -gt 0) {
+
+          Write-Host ""
+          Write-Host "Invalid JSON manifests:"
+
+          $jsonFailed |
+              ForEach-Object {
                   Write-Host "  - $_"
               }
-          }
+      }
 
-          if ($jsonFailed.Count -gt 0) {
-              Write-Host ""
-              Write-Host "Invalid JSON manifests:"
-              $jsonFailed | ForEach-Object {
-                  Write-Host "  - $_"
-              }
-          }
+      # ========================================
+      # Fail workflow if something failed
+      # ========================================
 
-          # ========================================
-          # 最终失败判断
-          # ========================================
+      if (
+          $failed.Count -gt 0 -or
+          $jsonFailed.Count -gt 0
+      ) {
+          throw "Manifest update or JSON validation failed."
+      }
 
-          if ($failed.Count -gt 0 -or $jsonFailed.Count -gt 0) {
-              throw "Manifest update or JSON validation failed."
-          }
+  # ========================================
+  # Show git changes
+  # ========================================
 
-      - name: Show changes
-        shell: pwsh
-        run: |
-          git status --short
-          git diff -- bucket
+  - name: Show changes
+    shell: pwsh
+    run: |
+      Write-Host "========================================"
+      Write-Host "Git changes"
+      Write-Host "========================================"
 
-      - name: Commit and push
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = 'Stop'
+      git status --short
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      Write-Host ""
+      git diff -- bucket
 
-          $changes = git status --porcelain
+  # ========================================
+  # Commit and push
+  # ========================================
 
-          if ([string]::IsNullOrWhiteSpace($changes)) {
-              Write-Host "No manifest changes. Nothing to commit."
-              exit 0
-          }
+  - name: Commit and push
+    shell: pwsh
+    run: |
+      $ErrorActionPreference = 'Stop'
 
-          git add bucket/*.json
+      git config user.name "github-actions[bot]"
+      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git commit `
-            -m "chore: update Scoop manifests"
+      $changes =
+          git status --porcelain
 
-          git push
+      if ([string]::IsNullOrWhiteSpace($changes)) {
+
+          Write-Host "No manifest changes."
+          Write-Host "Nothing to commit."
+
+          exit 0
+      }
+
+      git add bucket/*.json
+
+      git commit `
+          -m "chore: update Scoop manifests"
+
+      git push
