@@ -10,6 +10,9 @@
         }
     },
     "innosetup": true,
+    "shortcuts": [
+    ["sodam.exe", "SodaM"]
+]
     "checkver": {
         "github": "https://github.com/sodahub-org/sodam"
     },
