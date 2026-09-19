@@ -1,0 +1,23 @@
+{
+    "version": "0.1.2",
+    "description": "SodaM - 基于 GPUI + libresoda 的原生汽水音乐客户端",
+    "homepage": "https://github.com/sodahub-org/sodam",
+    "license": "AGPL-3.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/sodahub-org/sodam/releases/download/v0.1.2/sodam-0.1.2-windows-x64-setup.exe",
+            "hash": ""
+        }
+    },
+    "innosetup": true,
+    "checkver": {
+        "github": "https://github.com/sodahub-org/sodam"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/sodahub-org/sodam/releases/download/v$version/sodam-$version-windows-x64-setup.exe"
+            }
+        }
+    }
+}
