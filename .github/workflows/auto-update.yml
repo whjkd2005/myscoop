@@ -1,0 +1,124 @@
+```yaml
+name: Auto Update Scoop Manifests
+
+on:
+  schedule:
+    # 每天北京时间 03:00
+    - cron: "0 19 * * *"
+
+  workflow_dispatch:
+
+  push:
+    paths:
+      - "bucket/*.json"
+      - ".github/workflows/auto-update.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Check and update manifests
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout bucket
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Scoop
+        shell: pwsh
+        run: |
+          Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+
+          if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+              irm get.scoop.sh | iex
+          }
+
+          scoop --version
+
+      - name: Update Scoop
+        shell: pwsh
+        run: |
+          scoop update
+
+      - name: Check all manifests
+        shell: pwsh
+        run: |
+          $checkver = "$env:USERPROFILE\scoop\apps\scoop\current\bin\checkver.ps1"
+
+          if (-not (Test-Path $checkver)) {
+              throw "checkver.ps1 not found: $checkver"
+          }
+
+          & $checkver -App * -Dir "$env:GITHUB_WORKSPACE\bucket"
+
+      - name: Auto update all manifests
+        shell: pwsh
+        run: |
+          $checkver = "$env:USERPROFILE\scoop\apps\scoop\current\bin\checkver.ps1"
+
+          & $checkver `
+              -App * `
+              -Dir "$env:GITHUB_WORKSPACE\bucket" `
+              -Update
+
+      - name: Show manifest changes
+        shell: pwsh
+        run: |
+          git status --short
+          git diff -- bucket
+
+      - name: Validate JSON
+        shell: pwsh
+        run: |
+          $errors = @()
+
+          Get-ChildItem "$env:GITHUB_WORKSPACE\bucket\*.json" |
+              ForEach-Object {
+                  try {
+                      Get-Content $_.FullName -Raw |
+                          ConvertFrom-Json |
+                          Out-Null
+
+                      Write-Host "OK: $($_.Name)"
+                  }
+                  catch {
+                      $errors += $_.Name
+                      Write-Error "Invalid JSON: $($_.FullName)"
+                      Write-Error $_
+                  }
+              }
+
+          if ($errors.Count -gt 0) {
+              throw "Invalid manifest(s): $($errors -join ', ')"
+          }
+
+      - name: Check URLs
+        shell: pwsh
+        run: |
+          $checkurls = "$env:USERPROFILE\scoop\apps\scoop\current\bin\checkurls.ps1"
+
+          if (Test-Path $checkurls) {
+              & $checkurls -Dir "$env:GITHUB_WORKSPACE\bucket"
+          }
+
+      - name: Commit changes
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add bucket/*.json
+
+          if (git diff --cached --quiet) {
+              Write-Host "No manifest updates."
+              exit 0
+          }
+
+          $date = Get-Date -Format "yyyy-MM-dd"
+
+          git commit -m "Update manifests ($date)"
+          git push
+```
