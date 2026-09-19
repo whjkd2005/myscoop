@@ -1,37 +1,37 @@
 {
-    "version": "1.18.0-1",
-    "description": "基于哔哩哔哩官方客户端移植的Linux版本 支持漫游",
-    "homepage": "https://github.com/msojocs/bilibili-linux",
-    "license": "MIT",
-    "depends": "scoop-apps/7zip",
-    "architecture": {
-        "64bit": {
-            "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.18.0-1/bilibili-1.18.0-x64.exe"
-        }
-    },
-    "bin": "bilibili.exe",
-    "shortcuts": [
-        [
-            "bilibili.exe",
-            "哔哩哔哩"
-        ]
-    ],
-    "pre_install": [
-        "New-Item -Path \"$dir\\temp_extract\" -ItemType Directory -Force | Out-Null",
-        "Expand-7zipArchive \"$dir\\*.exe\" \"$dir\\temp_extract\"",
-        "Expand-7zipArchive \"$dir\\temp_extract\\`$PLUGINSDIR\\app-64.7z\" \"$dir\"",
-        "Remove-Item \"$dir\\temp_extract\" -Recurse -Force",
-        "Remove-Item \"$dir\\bilibili-*.exe\" -Force",
-        "Remove-Item \"$dir\\Uninstall*\" -Recurse -Force -ErrorAction SilentlyContinue"
-    ],
-    "checkver": {
-        "github": "https://github.com/msojocs/bilibili-linux"
-    },
-    "autoupdate": {
-        "architecture": {
-            "64bit": {
-                "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$version-x64.exe"
-            }
-        }
+  "version": "1.19.0",
+  "description": "基于哔哩哔哩官方客户端移植的Linux版本 支持漫游",
+  "homepage": "https://github.com/msojocs/bilibili-linux",
+  "license": "MIT",
+  "depends": "scoop-apps/7zip",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/msojocs/bilibili-linux/releases/download/v1.19.0/bilibili-1.19.0-x64.exe"
     }
+  },
+  "bin": "bilibili.exe",
+  "shortcuts": [
+    [
+      "bilibili.exe",
+      "哔哩哔哩"
+    ]
+  ],
+  "pre_install": [
+    "New-Item -Path \"$dir\\temp_extract\" -ItemType Directory -Force | Out-Null",
+    "Expand-7zipArchive \"$dir\\*.exe\" \"$dir\\temp_extract\"",
+    "Expand-7zipArchive \"$dir\\temp_extract\\`$PLUGINSDIR\\app-64.7z\" \"$dir\"",
+    "Remove-Item \"$dir\\temp_extract\" -Recurse -Force",
+    "Remove-Item \"$dir\\bilibili-*.exe\" -Force",
+    "Remove-Item \"$dir\\Uninstall*\" -Recurse -Force -ErrorAction SilentlyContinue"
+  ],
+  "checkver": {
+    "github": "https://github.com/msojocs/bilibili-linux"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/msojocs/bilibili-linux/releases/download/v$version/bilibili-$version-x64.exe"
+      }
+    }
+  }
 }
