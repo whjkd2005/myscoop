@@ -1,0 +1,24 @@
+{
+    "version": "0.6.0",
+    "description": "A fast, resilient, multi-source file retriever and download engine.",
+    "homepage": "https://github.com/ja7ad/hydra",
+    "license": "GPL-3.0-or-later",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/ja7ad/hydra/releases/download/v0.6.0/hydra-0.6.0-windows-amd64.zip",
+            "hash": ""
+        }
+    },
+    "bin": [["hydra-gui.exe", "hydra-gui"]],
+    "shortcuts": [["hydra-gui.exe", "Hydra"]],
+    "checkver": {
+        "github": "https://github.com/ja7ad/hydra"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/ja7ad/hydra/releases/download/v$version/hydra-$version-windows-amd64.zip"
+            }
+        }
+    }
+}
