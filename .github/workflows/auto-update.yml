@@ -247,10 +247,15 @@ jobs:
           }
 
           # ========================================
-          # Update URL only
+          # Update URL and extract_dir only
           #
           # IMPORTANT:
           # hash is NEVER touched.
+          #
+          # extract_dir must be kept in sync with
+          # $version whenever the autoupdate template
+          # contains it (e.g. hydra):
+          #   hydra-<version>-windows-amd64
           # ========================================
 
           function Update-ManifestUrl {
@@ -311,6 +316,30 @@ jobs:
                   if ($oldUrl -ne $newUrl) {
                       $Manifest.url = $newUrl
                       $changed = $true
+                  }
+
+                  # Simple manifest: extract_dir (top level)
+                  $autoExtractDir =
+                      Get-PropertyValue `
+                          -Object $auto `
+                          -Name "extract_dir"
+
+                  if ($autoExtractDir -is [string]) {
+
+                      $newExtractDir =
+                          Expand-AutoUpdateUrl `
+                              -Template $autoExtractDir `
+                              -Version $Version
+
+                      $oldExtractDir =
+                          Get-PropertyValue `
+                              -Object $Manifest `
+                              -Name "extract_dir"
+
+                      if ($oldExtractDir -ne $newExtractDir) {
+                          $Manifest.extract_dir = $newExtractDir
+                          $changed = $true
+                      }
                   }
 
                   return $changed
@@ -378,6 +407,30 @@ jobs:
                   if ($oldUrl -ne $newUrl) {
                       $archManifest.url = $newUrl
                       $changed = $true
+                  }
+
+                  # Architecture manifest: extract_dir (per arch)
+                  $archAutoExtractDir =
+                      Get-PropertyValue `
+                          -Object $archAuto `
+                          -Name "extract_dir"
+
+                  if ($archAutoExtractDir -is [string]) {
+
+                      $newExtractDir =
+                          Expand-AutoUpdateUrl `
+                              -Template $archAutoExtractDir `
+                              -Version $Version
+
+                      $oldExtractDir =
+                          Get-PropertyValue `
+                              -Object $archManifest `
+                              -Name "extract_dir"
+
+                      if ($oldExtractDir -ne $newExtractDir) {
+                          $archManifest.extract_dir = $newExtractDir
+                          $changed = $true
+                      }
                   }
               }
 
@@ -512,9 +565,9 @@ jobs:
                   $manifest.version = $latestVersion
 
                   # ----------------------------------------
-                  # 7. Update URL
+                  # 7. Update URL / extract_dir
                   #
-                  # ONLY version + URL are changed.
+                  # ONLY version + URL + extract_dir are changed.
                   # hash is NOT read, NOT calculated, NOT modified.
                   # ----------------------------------------
 
@@ -544,9 +597,10 @@ jobs:
 
                   Write-Host ""
                   Write-Host "UPDATED: $name"
-                  Write-Host "  Version : $currentVersion -> $latestVersion"
-                  Write-Host "  URL     : updated"
-                  Write-Host "  Hash    : untouched"
+                  Write-Host "  Version     : $currentVersion -> $latestVersion"
+                  Write-Host "  URL         : updated"
+                  Write-Host "  extract_dir : updated (if present)"
+                  Write-Host "  Hash        : untouched"
 
                   $updated += $name
               }
