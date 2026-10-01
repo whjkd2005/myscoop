@@ -17,7 +17,7 @@
             "$tmp = \"$dir\\tmp\"",
             "New-Item -ItemType Directory -Force -Path $tmp | Out-Null",
             "7z x \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -o$tmp -y",
-            "7z x \"$tmp\\$PLUGINSDIR\\app-64.7z\" -o$dir -y",
+            "7z x \"$tmp\\`$PLUGINSDIR\\app-64.7z\" -o$dir -y",
             "Remove-Item $tmp -Recurse -Force",
             "Remove-Item \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -Force"
         ]
