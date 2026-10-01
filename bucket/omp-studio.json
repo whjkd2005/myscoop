@@ -12,16 +12,16 @@
         }
     },
 
-"installer": {
-    "script": [
-        "$tmp = \"$dir\\tmp\"",
-        "New-Item -ItemType Directory -Force -Path $tmp | Out-Null",
-        "7z x \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -o$tmp -y",
-        "7z x \"$tmp\\`$PLUGINSDIR\\app-64.7z\" -o$dir -y",
-        "Remove-Item $tmp -Recurse -Force",
-        "Remove-Item \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -Force"
-    ]
-}
+    "installer": {
+        "script": [
+            "$tmp = \"$dir\\tmp\"",
+            "New-Item -ItemType Directory -Force -Path $tmp | Out-Null",
+            "7z x \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -o$tmp -y",
+            "7z x \"$tmp\\`$PLUGINSDIR\\app-64.7z\" -o$dir -y",
+            "Remove-Item $tmp -Recurse -Force",
+            "Remove-Item \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -Force"
+        ]
+    },
 
     "bin": [
         [
@@ -36,13 +36,13 @@
             "OMP Studio"
         ]
     ],
-    
+
     "post_install": [
-        "Remove-Item \"$dir\\$PLUGINSDIR\" -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item \"$dir\\$R0\" -Recurse -Force -ErrorAction SilentlyContinue",
+        "Remove-Item \"$dir\\`$PLUGINSDIR\" -Recurse -Force -ErrorAction SilentlyContinue",
+        "Remove-Item \"$dir\\`$R0\" -Recurse -Force -ErrorAction SilentlyContinue",
         "Remove-Item \"$dir\\[NSIS].nsi\" -Force -ErrorAction SilentlyContinue"
-],
-    
+    ],
+
     "checkver": {
         "github": "the-snowpear/omp-studio"
     },
