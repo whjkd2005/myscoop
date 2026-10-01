@@ -7,7 +7,7 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/the-snowpear/omp-studio/releases/download/v0.1.7/OMP-Studio-Setup-0.1.7-windows-x64.exe",
-            "hash": ""
+            "hash": "cdfea898437ccae45608ee23482505a7c90ff68faa3f3c2ef6dce18d0fc4020d"
         }
     },
     "installer": {
@@ -39,52 +39,65 @@
             "OMP Studio"
         ]
     ],
-    "post_install": [
-    "Write-Host \"DEBUG persist_dir=[$persist_dir] target=[$target] studioTarget=[$studioTarget]\"",
-    "$omp = \"$env:USERPROFILE\\.omp\"",
-    "$target = \"$persist_dir\\dot-omp\"",
-    "if (!(Test-Path $target)) { New-Item -ItemType Directory -Force -Path $target | Out-Null }",
-    "if (Test-Path $omp) {",
-    "    $item = Get-Item $omp -Force",
-    "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
-    "    if ($isLink) {",
-    "        Write-Host '.omp is already a junction, skip'",
-    "    } else {",
-    "        Write-Host 'Migrating existing .omp -> scoop persist...'",
-    "        Copy-Item \"$omp\\*\" $target -Recurse -Force -ErrorAction SilentlyContinue",
-    "        Remove-Item $omp -Recurse -Force",
-    "        New-Item -ItemType Junction -Path $omp -Target $target | Out-Null",
-    "    }",
-    "} else {",
-    "    New-Item -ItemType Junction -Path $omp -Target $target | Out-Null",
-    "}",
-
-    "$studio = \"$env:APPDATA\\omp-studio\"",
-    "$studioTarget = \"$persist_dir\\appdata-omp-studio\"",
-    "if (!(Test-Path $studioTarget)) { New-Item -ItemType Directory -Force -Path $studioTarget | Out-Null }",
-    "if (Test-Path $studio) {",
-    "    $item = Get-Item $studio -Force",
-    "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
-    "    if ($isLink) {",
-    "        Write-Host 'omp-studio AppData is already a junction, skip'",
-    "    } else {",
-    "        Write-Host 'Migrating existing omp-studio AppData -> scoop persist...'",
-    "        Copy-Item \"$studio\\*\" $studioTarget -Recurse -Force -ErrorAction SilentlyContinue",
-    "        Remove-Item $studio -Recurse -Force",
-    "        New-Item -ItemType Junction -Path $studio -Target $studioTarget | Out-Null",
-    "    }",
-    "} else {",
-    "    New-Item -ItemType Junction -Path $studio -Target $studioTarget | Out-Null",
-    "}"
+    "persist": [
+        "dot-omp",
+        "appdata-omp-studio"
     ],
-"uninstaller": {
-    "script": [
+    "pre_install": [
+        "New-Item \"$persist_dir\\dot-omp\" -ItemType Directory -Force | Out-Null",
+        "New-Item \"$persist_dir\\appdata-omp-studio\" -ItemType Directory -Force | Out-Null"
+    ],
+    "post_install": [
+        "Remove-Item -LiteralPath (Join-Path $dir '$PLUGINSDIR') -Recurse -Force -ErrorAction SilentlyContinue",
+        "Remove-Item -LiteralPath (Join-Path $dir '$R0') -Recurse -Force -ErrorAction SilentlyContinue",
+        "Remove-Item -LiteralPath (Join-Path $dir '[NSIS].nsi') -Force -ErrorAction SilentlyContinue",
+
         "$omp = \"$env:USERPROFILE\\.omp\"",
-        "if (Test-Path $omp) { $i = Get-Item $omp -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { [System.IO.Directory]::Delete($omp, $false) } }",
+        "$target = \"$persist_dir\\dot-omp\"",
+        "if (!(Test-Path $target)) { New-Item -ItemType Directory -Force -Path $target | Out-Null }",
+        "Write-Host \"Link .omp -> $target\"",
+        "if (Test-Path $omp) {",
+        "    $item = Get-Item $omp -Force",
+        "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
+        "    if ($isLink) {",
+        "        Write-Host '.omp is already a junction, skip'",
+        "    } else {",
+        "        Write-Host 'Migrating existing .omp -> scoop persist...'",
+        "        Copy-Item \"$omp\\*\" $target -Recurse -Force -ErrorAction SilentlyContinue",
+        "        Remove-Item $omp -Recurse -Force",
+        "        New-Item -ItemType Junction -Path $omp -Target $target | Out-Null",
+        "    }",
+        "} else {",
+        "    New-Item -ItemType Junction -Path $omp -Target $target | Out-Null",
+        "}",
+
         "$studio = \"$env:APPDATA\\omp-studio\"",
-        "if (Test-Path $studio) { $i = Get-Item $studio -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { [System.IO.Directory]::Delete($studio, $false) } }"
-    ]
-},
+        "$studioTarget = \"$persist_dir\\appdata-omp-studio\"",
+        "if (!(Test-Path $studioTarget)) { New-Item -ItemType Directory -Force -Path $studioTarget | Out-Null }",
+        "Write-Host \"Link omp-studio AppData -> $studioTarget\"",
+        "if (Test-Path $studio) {",
+        "    $item = Get-Item $studio -Force",
+        "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
+        "    if ($isLink) {",
+        "        Write-Host 'omp-studio AppData is already a junction, skip'",
+        "    } else {",
+        "        Write-Host 'Migrating existing omp-studio AppData -> scoop persist...'",
+        "        Copy-Item \"$studio\\*\" $studioTarget -Recurse -Force -ErrorAction SilentlyContinue",
+        "        Remove-Item $studio -Recurse -Force",
+        "        New-Item -ItemType Junction -Path $studio -Target $studioTarget | Out-Null",
+        "    }",
+        "} else {",
+        "    New-Item -ItemType Junction -Path $studio -Target $studioTarget | Out-Null",
+        "}"
+    ],
+    "uninstaller": {
+        "script": [
+            "$omp = \"$env:USERPROFILE\\.omp\"",
+            "if (Test-Path $omp) { $i = Get-Item $omp -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { [System.IO.Directory]::Delete($omp, $false) } }",
+            "$studio = \"$env:APPDATA\\omp-studio\"",
+            "if (Test-Path $studio) { $i = Get-Item $studio -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { [System.IO.Directory]::Delete($studio, $false) } }"
+        ]
+    },
     "checkver": {
         "github": "the-snowpear/omp-studio"
     },
