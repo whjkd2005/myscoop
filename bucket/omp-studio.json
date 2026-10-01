@@ -41,7 +41,7 @@
         "Remove-Item \"$dir\\$PLUGINSDIR\" -Recurse -Force -ErrorAction SilentlyContinue",
         "Remove-Item \"$dir\\$R0\" -Recurse -Force -ErrorAction SilentlyContinue",
         "Remove-Item \"$dir\\[NSIS].nsi\" -Force -ErrorAction SilentlyContinue"
-]
+],
     
     "checkver": {
         "github": "the-snowpear/omp-studio"
