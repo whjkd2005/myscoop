@@ -14,11 +14,12 @@
         "script": [
             "$tmp = Join-Path $dir 'tmp'",
             "New-Item -ItemType Directory -Force -Path $tmp | Out-Null",
-            "7z x (Join-Path $dir \"OMP-Studio-Setup-$version-windows-x64.exe\") \"-o$tmp\" -y | Out-Null",
+            "$setup = Join-Path $dir \"OMP-Studio-Setup-$version-windows-x64.exe\"",
+            "7z x $setup \"-o$tmp\" -y | Out-Null",
             "$plugins = Join-Path $tmp '$PLUGINSDIR'",
             "$app7z = Get-ChildItem -LiteralPath $plugins -Filter 'app-64.7z' -ErrorAction SilentlyContinue | Select-Object -First 1",
             "if (!$app7z) { $app7z = Get-ChildItem -LiteralPath $tmp -Filter 'app-64.7z' -Recurse -Force -ErrorAction SilentlyContinue | Select-Object -First 1 }",
-            "if (!$app7z) { throw 'app-64.7z not found inside the installer (looked under $PLUGINSDIR)' }",
+            "if (!$app7z) { throw 'app-64.7z not found inside the installer' }",
             "7z x $app7z.FullName \"-o$dir\" -y | Out-Null",
             "Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue",
             "Remove-Item -LiteralPath $setup -Force -ErrorAction SilentlyContinue"
