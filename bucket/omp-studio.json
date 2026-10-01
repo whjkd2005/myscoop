@@ -40,7 +40,42 @@
     "post_install": [
         "Remove-Item -LiteralPath (Join-Path $dir '$PLUGINSDIR') -Recurse -Force -ErrorAction SilentlyContinue",
         "Remove-Item -LiteralPath (Join-Path $dir '$R0') -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item -LiteralPath (Join-Path $dir '[NSIS].nsi') -Force -ErrorAction SilentlyContinue"
+        "Remove-Item -LiteralPath (Join-Path $dir '[NSIS].nsi') -Force -ErrorAction SilentlyContinue",
+        "$omp = \"$env:USERPROFILE\\.omp\"",
+    "$target = \"$persist_dir\\dot-omp\"",
+    "New-Item $target -ItemType Directory -Force | Out-Null",
+
+    "if (Test-Path $omp) {",
+    "    $item = Get-Item $omp -Force",
+    "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
+    "    if ($isLink) {",
+    "        $linkTarget = (cmd /c \"dir /AL \\\"$env:USERPROFILE\\\"\" 2>$null | Select-String '\\.omp').ToString()",
+    "        Write-Host \".omp is already a junction, skip\"",
+    "    } else {",
+    "        Write-Host 'Migrating existing .omp -> scoop persist...'",
+    "        Copy-Item \"$omp\\*\" $target -Recurse -Force -ErrorAction SilentlyContinue",
+    "        Remove-Item $omp -Recurse -Force",
+    "        cmd /c \"mklink /J \\\"$omp\\\" \\\"$target\\\"\"",
+    "    }",
+    "} else {",
+    "    cmd /c \"mklink /J \\\"$omp\\\" \\\"$target\\\"\"",
+    "}",
+
+    "$studio = \"$env:APPDATA\\omp-studio\"",
+    "$studioTarget = \"$persist_dir\\appdata-omp-studio\"",
+    "New-Item $studioTarget -ItemType Directory -Force | Out-Null",
+    "if (Test-Path $studio) {",
+    "    $item = Get-Item $studio -Force",
+    "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
+    "    if (-not $isLink) {",
+    "        Write-Host 'Migrating existing omp-studio AppData -> scoop persist...'",
+    "        Copy-Item \"$studio\\*\" $studioTarget -Recurse -Force -ErrorAction SilentlyContinue",
+    "        Remove-Item $studio -Recurse -Force",
+    "        cmd /c \"mklink /J \\\"$studio\\\" \\\"$studioTarget\\\"\"",
+    "    }",
+    "} else {",
+    "    cmd /c \"mklink /J \\\"$studio\\\" \\\"$studioTarget\\\"\"",
+    "}"
     ],
     "checkver": {
         "github": "the-snowpear/omp-studio"
