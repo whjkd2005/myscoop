@@ -1,0 +1,24 @@
+{
+    "version": "0.1.7",
+    "description": "OMP Studio Runtime - Oh My Pi Studio Runtime for Windows x64",
+    "homepage": "https://github.com/the-snowpear/omp-studio",
+    "license": "MIT license",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/the-snowpear/omp-studio/releases/download/v0.1.7/OMP-Studio-Runtime-18.3.0-studio.12-windows-x64.zip",
+            "hash": ""
+        }
+    },
+    "bin": [
+        [
+            "omp.exe",
+            "omp-studio"
+        ]
+    ],
+    "shortcuts": [
+        [
+            "omp.exe",
+            "OMP Studio"
+        ]
+    ]
+}
