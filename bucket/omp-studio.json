@@ -12,13 +12,15 @@
     },
     "installer": {
         "script": [
-            "$tmp = \"$dir\\tmp\"",
+            "$tmp = Join-Path $dir 'tmp'",
             "New-Item -ItemType Directory -Force -Path $tmp | Out-Null",
-            "7z x \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -o$tmp -y",
-            "$app7z = Get-ChildItem -Path $tmp -Filter \"app-64.7z\" -Recurse | Select-Object -First 1",
-            "if (!$app7z) { throw \"app-64.7z not found inside the installer\" }",
-            "7z x \"$($app7z.FullName)\" -o$dir -y",
-            "Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue"
+            "7z x (Join-Path $dir \"OMP-Studio-Setup-$version-windows-x64.exe\") \"-o$tmp\" -y | Out-Null",
+            "$plugins = Join-Path $tmp '$PLUGINSDIR'",
+            "$app7z = Get-ChildItem -LiteralPath $plugins -Filter 'app-64.7z' -ErrorAction SilentlyContinue | Select-Object -First 1",
+            "if (!$app7z) { $app7z = Get-ChildItem -LiteralPath $tmp -Filter 'app-64.7z' -Recurse -Force -ErrorAction SilentlyContinue | Select-Object -First 1 }",
+            "if (!$app7z) { throw 'app-64.7z not found inside the installer (looked under $PLUGINSDIR)' }",
+            "7z x $app7z.FullName \"-o$dir\" -y | Out-Null",
+            "Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue"
         ]
     },
     "bin": [
@@ -34,9 +36,9 @@
         ]
     ],
     "post_install": [
-        "Remove-Item \"$dir\\`$PLUGINSDIR\" -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item \"$dir\\`$R0\" -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item \"$dir\\[NSIS].nsi\" -Force -ErrorAction SilentlyContinue"
+        "Remove-Item -LiteralPath (Join-Path $dir '$PLUGINSDIR') -Recurse -Force -ErrorAction SilentlyContinue",
+        "Remove-Item -LiteralPath (Join-Path $dir '$R0') -Recurse -Force -ErrorAction SilentlyContinue",
+        "Remove-Item -LiteralPath (Join-Path $dir '[NSIS].nsi') -Force -ErrorAction SilentlyContinue"
     ],
     "checkver": {
         "github": "the-snowpear/omp-studio"
