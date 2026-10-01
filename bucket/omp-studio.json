@@ -22,7 +22,7 @@
         "Remove-Item $tmp -Recurse -Force",
         "Remove-Item \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -Force"
     ]
-}
+},
 
     "bin": [
         [
