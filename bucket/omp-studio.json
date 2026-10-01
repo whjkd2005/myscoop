@@ -14,8 +14,10 @@
         "script": [
             "$tmp = Join-Path $dir 'tmp'",
             "New-Item -ItemType Directory -Force -Path $tmp | Out-Null",
-            "$setup = if ($fname) { Join-Path $dir $fname } else { Join-Path $dir \"OMP-Studio-Setup-$version-windows-x64.exe\" }",
-            "7z x $setup \"-o$tmp\" -y | Out-Null",
+            "$setup = Get-ChildItem -LiteralPath $dir -Filter 'OMP-Studio-Setup-*.exe' -File -ErrorAction SilentlyContinue | Select-Object -First 1",
+            "if (!$setup) { $setup = Get-ChildItem -LiteralPath $dir -Filter '*.exe' -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne 'OMP Studio.exe' } | Select-Object -First 1 }",
+            "if (!$setup) { throw 'installer exe not found in $dir' }",
+            "7z x $setup.FullName \"-o$tmp\" -y | Out-Null",
             "$plugins = Join-Path $tmp '$PLUGINSDIR'",
             "$app7z = Get-ChildItem -LiteralPath $plugins -Filter 'app-64.7z' -ErrorAction SilentlyContinue | Select-Object -First 1",
             "if (!$app7z) { $app7z = Get-ChildItem -LiteralPath $tmp -Filter 'app-64.7z' -Recurse -Force -ErrorAction SilentlyContinue | Select-Object -First 1 }",
@@ -37,19 +39,7 @@
             "OMP Studio"
         ]
     ],
-    "persist": [
-        "dot-omp",
-        "appdata-omp-studio"
-    ],
-    "pre_install": [
-        "New-Item \"$persist_dir\\dot-omp\" -ItemType Directory -Force | Out-Null",
-        "New-Item \"$persist_dir\\appdata-omp-studio\" -ItemType Directory -Force | Out-Null"
-    ],
     "post_install": [
-        "Remove-Item -LiteralPath (Join-Path $dir '$PLUGINSDIR') -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item -LiteralPath (Join-Path $dir '$R0') -Recurse -Force -ErrorAction SilentlyContinue",
-        "Remove-Item -LiteralPath (Join-Path $dir '[NSIS].nsi') -Force -ErrorAction SilentlyContinue",
-
         "$omp = \"$env:USERPROFILE\\.omp\"",
         "$target = \"$persist_dir\\dot-omp\"",
         "New-Item $target -ItemType Directory -Force | Out-Null",
@@ -88,8 +78,10 @@
     ],
     "uninstaller": {
         "script": [
-            "if (Test-Path \"$env:USERPROFILE\\.omp\") { cmd /c \"rmdir \\\"$env:USERPROFILE\\.omp\\\"\" }",
-            "if (Test-Path \"$env:APPDATA\\omp-studio\") { cmd /c \"rmdir \\\"$env:APPDATA\\omp-studio\\\"\" }"
+            "$omp = \"$env:USERPROFILE\\.omp\"",
+            "if (Test-Path $omp) { $i = Get-Item $omp -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { cmd /c \"rmdir \\\"$omp\\\"\" } }",
+            "$studio = \"$env:APPDATA\\omp-studio\"",
+            "if (Test-Path $studio) { $i = Get-Item $studio -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { cmd /c \"rmdir \\\"$studio\\\"\" } }"
         ]
     },
     "checkver": {
