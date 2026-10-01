@@ -20,7 +20,8 @@
             "if (!$app7z) { $app7z = Get-ChildItem -LiteralPath $tmp -Filter 'app-64.7z' -Recurse -Force -ErrorAction SilentlyContinue | Select-Object -First 1 }",
             "if (!$app7z) { throw 'app-64.7z not found inside the installer (looked under $PLUGINSDIR)' }",
             "7z x $app7z.FullName \"-o$dir\" -y | Out-Null",
-            "Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue"
+            "Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue",
+            "Remove-Item -LiteralPath $setup -Force -ErrorAction SilentlyContinue"
         ]
     },
     "bin": [
