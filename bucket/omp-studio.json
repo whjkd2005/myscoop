@@ -76,14 +76,14 @@
     "    New-Item -ItemType Junction -Path $studio -Target $studioTarget | Out-Null",
     "}"
     ],
-    "uninstaller": {
-        "script": [
-            "$omp = \"$env:USERPROFILE\\.omp\"",
-            "if (Test-Path $omp) { $i = Get-Item $omp -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { cmd /c \"rmdir \\\"$omp\\\"\" } }",
-            "$studio = \"$env:APPDATA\\omp-studio\"",
-            "if (Test-Path $studio) { $i = Get-Item $studio -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { cmd /c \"rmdir \\\"$studio\\\"\" } }"
-        ]
-    },
+"uninstaller": {
+    "script": [
+        "$omp = \"$env:USERPROFILE\\.omp\"",
+        "if (Test-Path $omp) { $i = Get-Item $omp -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { [System.IO.Directory]::Delete($omp, $false) } }",
+        "$studio = \"$env:APPDATA\\omp-studio\"",
+        "if (Test-Path $studio) { $i = Get-Item $studio -Force; if ([bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { [System.IO.Directory]::Delete($studio, $false) } }"
+    ]
+},
     "checkver": {
         "github": "the-snowpear/omp-studio"
     },
