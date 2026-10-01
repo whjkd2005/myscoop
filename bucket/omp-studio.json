@@ -40,6 +40,7 @@
         ]
     ],
     "post_install": [
+    "Write-Host \"DEBUG persist_dir=[$persist_dir] target=[$target] studioTarget=[$studioTarget]\"",
     "$omp = \"$env:USERPROFILE\\.omp\"",
     "$target = \"$persist_dir\\dot-omp\"",
     "if (!(Test-Path $target)) { New-Item -ItemType Directory -Force -Path $target | Out-Null }",
