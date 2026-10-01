@@ -14,7 +14,7 @@
         "script": [
             "$tmp = Join-Path $dir 'tmp'",
             "New-Item -ItemType Directory -Force -Path $tmp | Out-Null",
-            "$setup = Join-Path $dir \"OMP-Studio-Setup-$version-windows-x64.exe\"",
+            "$setup = if ($fname) { Join-Path $dir $fname } else { Join-Path $dir \"OMP-Studio-Setup-$version-windows-x64.exe\" }",
             "7z x $setup \"-o$tmp\" -y | Out-Null",
             "$plugins = Join-Path $tmp '$PLUGINSDIR'",
             "$app7z = Get-ChildItem -LiteralPath $plugins -Filter 'app-64.7z' -ErrorAction SilentlyContinue | Select-Object -First 1",
@@ -22,7 +22,7 @@
             "if (!$app7z) { throw 'app-64.7z not found inside the installer' }",
             "7z x $app7z.FullName \"-o$dir\" -y | Out-Null",
             "Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue",
-            "Remove-Item -LiteralPath $setup -Force -ErrorAction SilentlyContinue"
+            "Get-ChildItem -LiteralPath $dir -Filter 'OMP-Studio-Setup-*.exe' -File -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue"
         ]
     },
     "bin": [
@@ -37,46 +37,61 @@
             "OMP Studio"
         ]
     ],
+    "persist": [
+        "dot-omp",
+        "appdata-omp-studio"
+    ],
+    "pre_install": [
+        "New-Item \"$persist_dir\\dot-omp\" -ItemType Directory -Force | Out-Null",
+        "New-Item \"$persist_dir\\appdata-omp-studio\" -ItemType Directory -Force | Out-Null"
+    ],
     "post_install": [
         "Remove-Item -LiteralPath (Join-Path $dir '$PLUGINSDIR') -Recurse -Force -ErrorAction SilentlyContinue",
         "Remove-Item -LiteralPath (Join-Path $dir '$R0') -Recurse -Force -ErrorAction SilentlyContinue",
         "Remove-Item -LiteralPath (Join-Path $dir '[NSIS].nsi') -Force -ErrorAction SilentlyContinue",
+
         "$omp = \"$env:USERPROFILE\\.omp\"",
-    "$target = \"$persist_dir\\dot-omp\"",
-    "New-Item $target -ItemType Directory -Force | Out-Null",
+        "$target = \"$persist_dir\\dot-omp\"",
+        "New-Item $target -ItemType Directory -Force | Out-Null",
+        "if (Test-Path $omp) {",
+        "    $item = Get-Item $omp -Force",
+        "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
+        "    if ($isLink) {",
+        "        Write-Host '.omp is already a junction, skip'",
+        "    } else {",
+        "        Write-Host 'Migrating existing .omp -> scoop persist...'",
+        "        Copy-Item \"$omp\\*\" $target -Recurse -Force -ErrorAction SilentlyContinue",
+        "        Remove-Item $omp -Recurse -Force",
+        "        cmd /c \"mklink /J \\\"$omp\\\" \\\"$target\\\"\"",
+        "    }",
+        "} else {",
+        "    cmd /c \"mklink /J \\\"$omp\\\" \\\"$target\\\"\"",
+        "}",
 
-    "if (Test-Path $omp) {",
-    "    $item = Get-Item $omp -Force",
-    "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
-    "    if ($isLink) {",
-    "        $linkTarget = (cmd /c \"dir /AL \\\"$env:USERPROFILE\\\"\" 2>$null | Select-String '\\.omp').ToString()",
-    "        Write-Host \".omp is already a junction, skip\"",
-    "    } else {",
-    "        Write-Host 'Migrating existing .omp -> scoop persist...'",
-    "        Copy-Item \"$omp\\*\" $target -Recurse -Force -ErrorAction SilentlyContinue",
-    "        Remove-Item $omp -Recurse -Force",
-    "        cmd /c \"mklink /J \\\"$omp\\\" \\\"$target\\\"\"",
-    "    }",
-    "} else {",
-    "    cmd /c \"mklink /J \\\"$omp\\\" \\\"$target\\\"\"",
-    "}",
-
-    "$studio = \"$env:APPDATA\\omp-studio\"",
-    "$studioTarget = \"$persist_dir\\appdata-omp-studio\"",
-    "New-Item $studioTarget -ItemType Directory -Force | Out-Null",
-    "if (Test-Path $studio) {",
-    "    $item = Get-Item $studio -Force",
-    "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
-    "    if (-not $isLink) {",
-    "        Write-Host 'Migrating existing omp-studio AppData -> scoop persist...'",
-    "        Copy-Item \"$studio\\*\" $studioTarget -Recurse -Force -ErrorAction SilentlyContinue",
-    "        Remove-Item $studio -Recurse -Force",
-    "        cmd /c \"mklink /J \\\"$studio\\\" \\\"$studioTarget\\\"\"",
-    "    }",
-    "} else {",
-    "    cmd /c \"mklink /J \\\"$studio\\\" \\\"$studioTarget\\\"\"",
-    "}"
+        "$studio = \"$env:APPDATA\\omp-studio\"",
+        "$studioTarget = \"$persist_dir\\appdata-omp-studio\"",
+        "New-Item $studioTarget -ItemType Directory -Force | Out-Null",
+        "if (Test-Path $studio) {",
+        "    $item = Get-Item $studio -Force",
+        "    $isLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)",
+        "    if ($isLink) {",
+        "        Write-Host 'omp-studio AppData is already a junction, skip'",
+        "    } else {",
+        "        Write-Host 'Migrating existing omp-studio AppData -> scoop persist...'",
+        "        Copy-Item \"$studio\\*\" $studioTarget -Recurse -Force -ErrorAction SilentlyContinue",
+        "        Remove-Item $studio -Recurse -Force",
+        "        cmd /c \"mklink /J \\\"$studio\\\" \\\"$studioTarget\\\"\"",
+        "    }",
+        "} else {",
+        "    cmd /c \"mklink /J \\\"$studio\\\" \\\"$studioTarget\\\"\"",
+        "}"
     ],
+    "uninstaller": {
+        "script": [
+            "if (Test-Path \"$env:USERPROFILE\\.omp\") { cmd /c \"rmdir \\\"$env:USERPROFILE\\.omp\\\"\" }",
+            "if (Test-Path \"$env:APPDATA\\omp-studio\") { cmd /c \"rmdir \\\"$env:APPDATA\\omp-studio\\\"\" }"
+        ]
+    },
     "checkver": {
         "github": "the-snowpear/omp-studio"
     },
