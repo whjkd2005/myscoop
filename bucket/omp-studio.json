@@ -18,7 +18,6 @@
         "New-Item -ItemType Directory -Force -Path $tmp | Out-Null",
         "7z x \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -o$tmp -y",
         "$app7z = Get-ChildItem -Path $tmp -Filter \"app-64.7z\" -Recurse | Select-Object -First 1",
-        "if (!$app7z) { throw \"app-64.7z not found\" }",
         "7z x \"$($app7z.FullName)\" -o$dir -y",
         "Remove-Item $tmp -Recurse -Force",
         "Remove-Item \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -Force"
