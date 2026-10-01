@@ -1,24 +1,51 @@
 {
     "version": "0.1.7",
-    "description": "OMP Studio Runtime - Oh My Pi Studio Runtime for Windows x64",
+    "description": "OMP Studio - Oh My Pi Studio",
     "homepage": "https://github.com/the-snowpear/omp-studio",
     "license": "MIT license",
+    "depends": "7zip",
+
     "architecture": {
         "64bit": {
-            "url": "https://github.com/the-snowpear/omp-studio/releases/download/v0.1.7/OMP-Studio-Runtime-18.3.0-studio.12-windows-x64.zip",
+            "url": "https://github.com/the-snowpear/omp-studio/releases/download/v0.1.7/OMP-Studio-Setup-0.1.7-windows-x64.exe",
             "hash": ""
         }
     },
+
+    "installer": {
+        "script": [
+            "$temp = \"$dir\\tmp\"",
+            "New-Item -ItemType Directory -Force -Path $temp | Out-Null",
+            "7z x \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -o$temp -y",
+            "7z x \"$temp\\app-64.7z\" -o$dir -y",
+            "Remove-Item $temp -Recurse -Force",
+            "Remove-Item \"$dir\\OMP-Studio-Setup-$version-windows-x64.exe\" -Force"
+        ]
+    },
+
     "bin": [
         [
-            "omp.exe",
+            "OMP Studio.exe",
             "omp-studio"
         ]
     ],
+
     "shortcuts": [
         [
-            "omp.exe",
+            "OMP Studio.exe",
             "OMP Studio"
         ]
-    ]
+    ],
+
+    "checkver": {
+        "github": "the-snowpear/omp-studio"
+    },
+
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/the-snowpear/omp-studio/releases/download/v$version/OMP-Studio-Setup-$version-windows-x64.exe"
+            }
+        }
+    }
 }
