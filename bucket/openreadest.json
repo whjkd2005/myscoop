@@ -1,0 +1,30 @@
+{
+    "version": "0.9.100",
+    "description": "OpenReadest ebook reader with WebDAV sync support",
+    "homepage": "https://github.com/luyishui/OpenReadest",
+    "license": "AGPL-3.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/luyishui/OpenReadest/releases/download/v0.9.100/OpenReadest_0.9.100_x64-setup.exe",
+            "hash": ""
+        }
+    },
+    "innosetup": true,
+    "bin": "OpenReadest.exe",
+    "shortcuts": [
+        [
+            "OpenReadest.exe",
+            "OpenReadest"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/luyishui/OpenReadest"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/luyishui/OpenReadest/releases/download/v$version/OpenReadest_$version_x64-setup.exe"
+            }
+        }
+    }
+}
