@@ -3,6 +3,7 @@
     "description": "OpenReadest ebook reader",
     "homepage": "https://github.com/luyishui/OpenReadest",
     "license": "AGPL-3.0",
+    "depends": "7zip",
     "architecture": {
         "64bit": {
             "url": "https://github.com/luyishui/OpenReadest/releases/download/v0.9.100/OpenReadest_0.9.100_x64-setup.exe",
@@ -10,11 +11,11 @@
         }
     },
     "pre_install": [
-        "Get-ChildItem \"$dir\" -Recurse -Filter openreadest.exe | ForEach-Object { Copy-Item $_.FullName \"$dir\\OpenReadest.exe\" -Force }",
-        "Get-ChildItem \"$dir\" -Recurse -Filter openreadest_thumbnail.dll | ForEach-Object { Copy-Item $_.FullName \"$dir\\openreadest_thumbnail.dll\" -Force }",
-        "Remove-Item \"$dir\\OpenReadest_0.9.100_x64-setup.exe\" -Force",
-        "Remove-Item \"$dir\\uninstall.exe\" -Force -ErrorAction SilentlyContinue",
-        "Remove-Item \"$dir\\[NSIS].nsi\" -Force -ErrorAction SilentlyContinue"
+        "7z x \"$dir\\OpenReadest_0.9.100_x64-setup.exe\" -o\"$dir\\extract\" -y",
+        "Copy-Item \"$dir\\extract\\openreadest.exe\" \"$dir\\OpenReadest.exe\" -Force",
+        "Copy-Item \"$dir\\extract\\openreadest_thumbnail.dll\" \"$dir\\openreadest_thumbnail.dll\" -Force",
+        "Remove-Item \"$dir\\extract\" -Recurse -Force",
+        "Remove-Item \"$dir\\OpenReadest_0.9.100_x64-setup.exe\" -Force"
     ],
     "bin": "OpenReadest.exe",
     "shortcuts": [
