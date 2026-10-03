@@ -1,6 +1,6 @@
 {
     "version": "0.9.100",
-    "description": "OpenReadest ebook reader",
+    "description": "OpenReadest 是基于 Readest 的非官方分支，专注于保留本地阅读功能，同时增加 WebDAV 同步支持，专为私有云或自托管 WebDAV 场景设计。",
     "homepage": "https://github.com/luyishui/OpenReadest",
     "license": "AGPL-3.0",
     "depends": "7zip",
