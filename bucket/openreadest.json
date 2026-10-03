@@ -1,6 +1,6 @@
 {
     "version": "0.9.100",
-    "description": "OpenReadest ebook reader with WebDAV sync support",
+    "description": "OpenReadest ebook reader",
     "homepage": "https://github.com/luyishui/OpenReadest",
     "license": "AGPL-3.0",
     "architecture": {
@@ -9,7 +9,13 @@
             "hash": ""
         }
     },
-    "innosetup": true,
+    "pre_install": [
+        "Get-ChildItem \"$dir\" -Recurse -Filter openreadest.exe | ForEach-Object { Copy-Item $_.FullName \"$dir\\OpenReadest.exe\" -Force }",
+        "Get-ChildItem \"$dir\" -Recurse -Filter openreadest_thumbnail.dll | ForEach-Object { Copy-Item $_.FullName \"$dir\\openreadest_thumbnail.dll\" -Force }",
+        "Remove-Item \"$dir\\OpenReadest_0.9.100_x64-setup.exe\" -Force",
+        "Remove-Item \"$dir\\uninstall.exe\" -Force -ErrorAction SilentlyContinue",
+        "Remove-Item \"$dir\\[NSIS].nsi\" -Force -ErrorAction SilentlyContinue"
+    ],
     "bin": "OpenReadest.exe",
     "shortcuts": [
         [
@@ -18,7 +24,7 @@
         ]
     ],
     "checkver": {
-        "github": "https://github.com/luyishui/OpenReadest"
+        "github": "luyishui/OpenReadest"
     },
     "autoupdate": {
         "architecture": {
