@@ -1,0 +1,36 @@
+{
+    "version": "2.5.020604",
+    "description": "EasyTier EUI - EasyTier graphical user interface",
+    "homepage": "https://github.com/710850609/EasyTier-EUI",
+    "license": "Apache-2.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/710850609/EasyTier-EUI/releases/download/2.5.020604/EasyTier-EUI-windows-x86_64-2.5.020604.zip",
+            "hash": ""
+        }
+    },
+    "extract_dir": "EasyTier-EUI",
+    "bin": [
+        [
+            "EasyTier-EUI.exe",
+            "easytier-eui"
+        ]
+    ],
+    "shortcuts": [
+        [
+            "EasyTier-EUI.exe",
+            "EasyTier EUI"
+        ]
+    ],
+    "checkver": {
+        "github": "710850609/EasyTier-EUI"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/710850609/EasyTier-EUI/releases/download/$version/EasyTier-EUI-windows-x86_64-$version.zip"
+            }
+        },
+        "extract_dir": "EasyTier-EUI"
+    }
+}
