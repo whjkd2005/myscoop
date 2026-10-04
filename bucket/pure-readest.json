@@ -1,0 +1,36 @@
+{
+    "version": "0.0.6",
+    "description": "Pure Readest ebook reader",
+    "homepage": "https://github.com/ZerothRound/pure-readest",
+    "license": "MIT",
+    "depends": "7zip",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/ZerothRound/pure-readest/releases/download/v0.0.6/pure-readest_0.0.6_x64-setup.exe",
+            "hash": ""
+        }
+    },
+    "pre_install": [
+        "7z x \"$dir\\pure-readest_0.0.6_x64-setup.exe\" -o\"$dir\\extract\" -y",
+        "Copy-Item \"$dir\\extract\\pure-readest.exe\" \"$dir\\pure-readest.exe\" -Force",
+        "Remove-Item \"$dir\\extract\" -Recurse -Force",
+        "Remove-Item \"$dir\\pure-readest_0.0.6_x64-setup.exe\" -Force"
+    ],
+    "bin": "pure-readest.exe",
+    "shortcuts": [
+        [
+            "pure-readest.exe",
+            "Pure Readest"
+        ]
+    ],
+    "checkver": {
+        "github": "ZerothRound/pure-readest"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/ZerothRound/pure-readest/releases/download/v$version/pure-readest_$version_x64-setup.exe"
+            }
+        }
+    }
+}
