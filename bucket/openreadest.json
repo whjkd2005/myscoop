@@ -25,7 +25,7 @@
         ]
     ],
     "checkver": {
-        "github": "luyishui/OpenReadest"
+        "github": "https://github.com/luyishui/OpenReadest"
     },
     "autoupdate": {
         "architecture": {
