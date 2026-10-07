@@ -1,0 +1,33 @@
+{
+    "version": "26.06.12",
+    "description": "Windows debloat, optimization and customization utility",
+    "homepage": "https://github.com/memstechtips/Winhance",
+    "license": {
+        "identifier": "PolyForm-Shield-1.0.0",
+        "url": "https://github.com/memstechtips/Winhance/blob/main/LICENSE.txt"
+    },
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/memstechtips/Winhance/releases/download/v26.06.12/Winhance.Installer.exe",
+            "hash": ""
+        }
+    },
+    "innosetup": true,
+    "bin": "Winhance.exe",
+    "shortcuts": [
+        [
+            "Winhance.exe",
+            "Winhance"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/memstechtips/Winhance"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/memstechtips/Winhance/releases/download/v$version/Winhance.Installer.exe"
+            }
+        }
+    }
+}
