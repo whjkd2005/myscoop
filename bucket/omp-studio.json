@@ -7,7 +7,7 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/the-snowpear/omp-studio/releases/download/v0.1.7/OMP-Studio-Setup-0.1.7-windows-x64.exe",
-            "hash": "cdfea898437ccae45608ee23482505a7c90ff68faa3f3c2ef6dce18d0fc4020d"
+            "hash": ""
         }
     },
     "installer": {
@@ -99,7 +99,7 @@
         ]
     },
     "checkver": {
-        "github": "the-snowpear/omp-studio"
+        "github": "https://github.com/the-snowpear/omp-studio"
     },
     "autoupdate": {
         "architecture": {
