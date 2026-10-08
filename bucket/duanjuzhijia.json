@@ -1,0 +1,29 @@
+{
+    "version": "1.0.58+59",
+    "description": "短剧之家 v2 电脑版",
+    "homepage": "https://github.com/jackherex/duanjuzhijia-down-pc",
+    "license": "Unknown",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v1.0.58-59/duanjuzhijia2-1.0.58%2B59-windows-x64.zip",
+            "hash": ""
+        }
+    },
+    "bin": "duanjuzhijia2.exe",
+    "shortcuts": [
+        [
+            "duanjuzhijia2.exe",
+            "短剧之家"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/jackherex/duanjuzhijia-down-pc"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v$version/duanjuzhijia2-$version-windows-x64.zip"
+            }
+        }
+    }
+}
