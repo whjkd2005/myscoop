@@ -24,7 +24,7 @@
         ]
     ],
     "checkver": {
-        "github": "ZerothRound/pure-readest"
+        "github": "https://github.com/ZerothRound/pure-readest"
     },
     "autoupdate": {
         "architecture": {
