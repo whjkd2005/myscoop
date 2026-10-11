@@ -23,16 +23,18 @@
             "Pure Readest"
         ]
     ],
-    "persist": [
-        "data"
-    ],
-    "post_install": [
-        "$target = \"$env:APPDATA\\com.bilingify.readest\"",
-        "$persist = \"$dir\\data\"",
-        "if (!(Test-Path $persist)) { New-Item -ItemType Directory -Path $persist | Out-Null }",
-        "if (Test-Path $target) { Move-Item $target \"$persist\\\" -Force }",
-        "if (!(Test-Path $target)) { New-Item -ItemType Junction -Path $target -Target $persist | Out-Null }"
-    ],    
+"persist": [
+    "com.bilingify.readest"
+],
+"post_install": [
+    "$target = \"$env:APPDATA\\com.bilingify.readest\"",
+    "$persist = \"$persist_dir\\com.bilingify.readest\"",
+    "if (Test-Path $target) {",
+    "    if (!(Test-Path $persist)) { New-Item -ItemType Directory -Path \"$persist_dir\" | Out-Null; Move-Item $target $persist -Force }",
+    "}",
+    "if (!(Test-Path $persist)) { New-Item -ItemType Directory -Path $persist -Force | Out-Null }",
+    "if (!(Test-Path $target)) { New-Item -ItemType Junction -Path $target -Target $persist | Out-Null }"
+],
     "checkver": {
         "github": "https://github.com/ZerothRound/pure-readest"
     },
