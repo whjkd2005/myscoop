@@ -21,7 +21,7 @@
 ],
 "post_install": [
     "$target = \"$env:APPDATA\\reasonix\"",
-    "$persist = \"$persist_dir\\reasonix\"",
+    "$persist = \"$persist_dir\"",
     "if (!(Test-Path $persist)) { New-Item -ItemType Directory -Path $persist -Force | Out-Null }",
     "if (Test-Path $target) { Copy-Item \"$target\\*\" $persist -Recurse -Force; Remove-Item $target -Recurse -Force }",
     "if (!(Test-Path $target)) { New-Item -ItemType Junction -Path $target -Target $persist | Out-Null }",
