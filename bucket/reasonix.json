@@ -1,15 +1,14 @@
 {
-    "version": "desktop-v1.38.3-20261012-0045",
+    "version": "1.38.3",
     "description": "Reasonix desktop application for DeepSeek Reasoning",
     "homepage": "https://github.com/Linearl/DeepSeek-Reasonix",
-    "license": "MIT",
+    "license": "Unknown",
     "architecture": {
         "64bit": {
             "url": "https://github.com/Linearl/DeepSeek-Reasonix/releases/download/desktop-v1.38.3-20261012-0045/Reasonix-windows-amd64.zip",
             "hash": ""
         }
     },
-{
     "bin": "Reasonix.exe",
     "shortcuts": [
         [
@@ -18,25 +17,32 @@
         ]
     ],
     "persist": [
-        "reasonix"
+        "config"
     ],
     "post_install": [
         "$target = \"$env:APPDATA\\reasonix\"",
-        "$persist = \"$persist_dir\\reasonix\"",
+        "$persist = \"$persist_dir\\config\"",
         "if (Test-Path $target) {",
-        "    if (!(Test-Path $persist)) { Move-Item $target $persist -Force }",
+        "    if (!(Test-Path $persist)) {",
+        "        New-Item -ItemType Directory -Path \"$persist\" -Force | Out-Null",
+        "    }",
+        "    Move-Item \"$target\\*\" \"$persist\" -Force",
+        "    Remove-Item \"$target\" -Recurse -Force",
         "}",
-        "if (!(Test-Path $persist)) { New-Item -ItemType Directory -Path $persist -Force | Out-Null }",
-        "if (!(Test-Path $target)) { New-Item -ItemType Junction -Path $target -Target $persist | Out-Null }"
-    ]
-}
+        "if (!(Test-Path $persist)) {",
+        "    New-Item -ItemType Directory -Path $persist -Force | Out-Null",
+        "}",
+        "if (!(Test-Path $target)) {",
+        "    New-Item -ItemType Junction -Path $target -Target $persist | Out-Null",
+        "}"
+    ],
     "checkver": {
         "github": "https://github.com/Linearl/DeepSeek-Reasonix"
     },
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://github.com/Linearl/DeepSeek-Reasonix/releases/download/$version/Reasonix-windows-amd64.zip"
+                "url": "https://github.com/Linearl/DeepSeek-Reasonix/releases/download/desktop-v$version-20261012-0045/Reasonix-windows-amd64.zip"
             }
         }
     }
