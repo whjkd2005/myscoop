@@ -9,6 +9,7 @@
             "hash": ""
         }
     },
+{
     "bin": "Reasonix.exe",
     "shortcuts": [
         [
@@ -16,22 +17,19 @@
             "Reasonix"
         ]
     ],
+    "persist": [
+        "reasonix"
+    ],
     "post_install": [
-    "$target = \"$env:APPDATA\\reasonix\"",
-    "$persist = \"$persist_dir\\reasonix\"",
-    "if (Test-Path $target) {",
-    "    if (!(Test-Path $persist)) {",
-    "        New-Item -ItemType Directory -Path \"$persist_dir\" -Force | Out-Null",
-    "        Move-Item $target $persist -Force",
-    "    }",
-    "}",
-    "if (!(Test-Path $persist)) {",
-    "    New-Item -ItemType Directory -Path $persist -Force | Out-Null",
-    "}",
-    "if (!(Test-Path $target)) {",
-    "    New-Item -ItemType Junction -Path $target -Target $persist | Out-Null",
-    "}"
-]    
+        "$target = \"$env:APPDATA\\reasonix\"",
+        "$persist = \"$persist_dir\\reasonix\"",
+        "if (Test-Path $target) {",
+        "    if (!(Test-Path $persist)) { Move-Item $target $persist -Force }",
+        "}",
+        "if (!(Test-Path $persist)) { New-Item -ItemType Directory -Path $persist -Force | Out-Null }",
+        "if (!(Test-Path $target)) { New-Item -ItemType Junction -Path $target -Target $persist | Out-Null }"
+    ]
+}
     "checkver": {
         "github": "https://github.com/Linearl/DeepSeek-Reasonix"
     },
