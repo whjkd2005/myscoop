@@ -16,26 +16,28 @@
             "Reasonix"
         ]
     ],
-    "persist": [
-        "config"
-    ],
-    "post_install": [
-        "$target = \"$env:APPDATA\\reasonix\"",
-        "$persist = \"$persist_dir\\config\"",
-        "if (Test-Path $target) {",
-        "    if (!(Test-Path $persist)) {",
-        "        New-Item -ItemType Directory -Path \"$persist\" -Force | Out-Null",
-        "    }",
-        "    Move-Item \"$target\\*\" \"$persist\" -Force",
-        "    Remove-Item \"$target\" -Recurse -Force",
-        "}",
-        "if (!(Test-Path $persist)) {",
-        "    New-Item -ItemType Directory -Path $persist -Force | Out-Null",
-        "}",
-        "if (!(Test-Path $target)) {",
-        "    New-Item -ItemType Junction -Path $target -Target $persist | Out-Null",
-        "}"
-    ],
+"persist": [
+    "reasonix"
+],
+"post_install": [
+    "$target = \"$env:APPDATA\\reasonix\"",
+    "$persist = \"$persist_dir\\reasonix\"",
+
+    "if (!(Test-Path \"$persist\")) {",
+    "    New-Item -ItemType Directory -Path \"$persist\" -Force | Out-Null",
+    "}",
+
+    "if (Test-Path \"$target\") {",
+    "    if (!(Get-Item \"$target\").LinkType) {",
+    "        Copy-Item \"$target\\*\" \"$persist\" -Recurse -Force",
+    "        Remove-Item \"$target\" -Recurse -Force",
+    "    }",
+    "}",
+
+    "if (!(Test-Path \"$target\")) {",
+    "    New-Item -ItemType Junction -Path \"$target\" -Target \"$persist\" | Out-Null",
+    "}"
+]
     "checkver": {
         "github": "https://github.com/Linearl/DeepSeek-Reasonix"
     },
