@@ -1,0 +1,29 @@
+{
+    "version": "desktop-v1.38.3-20261012-0045",
+    "description": "Reasonix desktop application for DeepSeek Reasoning",
+    "homepage": "https://github.com/Linearl/DeepSeek-Reasonix",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/Linearl/DeepSeek-Reasonix/releases/download/desktop-v1.38.3-20261012-0045/Reasonix-windows-amd64.zip",
+            "hash": ""
+        }
+    },
+    "bin": "Reasonix.exe",
+    "shortcuts": [
+        [
+            "Reasonix.exe",
+            "Reasonix"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/Linearl/DeepSeek-Reasonix"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/Linearl/DeepSeek-Reasonix/releases/download/$version/Reasonix-windows-amd64.zip"
+            }
+        }
+    }
+}
