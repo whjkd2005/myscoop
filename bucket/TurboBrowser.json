@@ -1,5 +1,5 @@
 {
-  "version": "154.0.8037.99",
+  "version": "154.0.8037.100",
   "description": "Turbo Browser",
   "homepage": "https://github.com/tbrowser/Turbo-Browser",
   "license": {
@@ -8,7 +8,7 @@
   },
   "architecture": {
     "64bit": {
-      "url": "https://github.com/tbrowser/Turbo-Browser/releases/download/154.0.8037.99/Turbo_154.0.8037.99_portable.7z",
+      "url": "https://github.com/tbrowser/Turbo-Browser/releases/download/154.0.8037.100/Turbo_154.0.8037.100_portable.7z",
       "hash": ""
     }
   },
