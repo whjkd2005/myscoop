@@ -1,0 +1,24 @@
+{
+    "version": "1.7.1",
+    "description": "一款开源简洁高颜值的酷狗第三方客户端 / An open-source, concise, and aesthetically pleasing third-party client for KuGou",
+    "homepage": "https://music.moekoe.cn/",
+    "license": "GPL-2.0-only",
+    "url": "https://github.com/MoeKoeMusic/MoeKoeMusic/releases/download/v1.7.1/MoeKoe_Music_Setup_v1.7.1-x64.exe#/dl.7z",
+    "pre_install": [
+        "Expand-7zipArchive \"$dir\\`$PLUGINSDIR\\app-64.7z\" \"$dir\" -Removal",
+        "Remove-Item \"$dir\\`$PLUGINSDIR\", \"$dir\\Uninstall*\", \"$dir\\resources\\app-update.yml\" -Force -Recurse -ErrorAction SilentlyContinue"
+    ],
+    "bin": "MoeKoe Music.exe",
+    "shortcuts": [
+        [
+            "MoeKoe Music.exe",
+            "MoeKoe Music"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/MoeKoeMusic/MoeKoeMusic"
+    },
+    "autoupdate": {
+        "url": "https://github.com/MoeKoeMusic/MoeKoeMusic/releases/download/v$version/MoeKoe_Music_Setup_v$version-x64.exe#/dl.7z",
+    }
+}
