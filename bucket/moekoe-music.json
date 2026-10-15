@@ -19,6 +19,6 @@
         "github": "https://github.com/MoeKoeMusic/MoeKoeMusic"
     },
     "autoupdate": {
-        "url": "https://github.com/MoeKoeMusic/MoeKoeMusic/releases/download/v$version/MoeKoe_Music_Setup_v$version-x64.exe#/dl.7z",
-    },
+        "url": "https://github.com/MoeKoeMusic/MoeKoeMusic/releases/download/v$version/MoeKoe_Music_Setup_v$version-x64.exe#/dl.7z"
+    }
 }
