@@ -1,0 +1,46 @@
+
+{
+    "version": "0.6.2",
+    "description": "Nomo 是一款所见即所得、即时渲染、无干扰的 Markdown 编辑器",
+    "homepage": "https://github.com/nomo-md/nomo",
+    "license": "AGPL-3.0-or-later",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/nomo-md/nomo/releases/download/v0.6.2/Nomo_0.6.2_x64.zip",
+            "hash": ""
+        }
+    },
+    "extract_dir": "Nomo",
+    "bin": "Nomo.exe",
+    "shortcuts": [
+        [
+            "Nomo.exe",
+            "Nomo"
+        ]
+    ],
+    "post_install": [
+        "$exe = Join-Path $dir 'Nomo\\Nomo.exe'",
+        "$regPath = 'HKCU:\\Software\\Classes\\Nomo.md'",
+        "New-Item -Path $regPath -Force | Out-Null",
+        "Set-Item -Path $regPath -Value 'Markdown Document'",
+        "New-Item -Path (Join-Path $regPath 'DefaultIcon') -Force | Out-Null",
+        "Set-Item -Path (Join-Path $regPath 'DefaultIcon') -Value ('\"' + $exe + '\",0')",
+        "New-Item -Path (Join-Path $regPath 'shell\\open\\command') -Force | Out-Null",
+        "Set-Item -Path (Join-Path $regPath 'shell\\open\\command') -Value ('\"' + $exe + '\" \"%1\"')",
+        "New-Item -Path 'HKCU:\\Software\\Classes\\.md' -Force | Out-Null",
+        "Set-Item -Path 'HKCU:\\Software\\Classes\\.md' -Value 'Nomo.md'",
+        "$signature = '[DllImport(\"shell32.dll\")] public static extern void SHChangeNotify(int wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);'",
+        "Add-Type -MemberDefinition $signature -Name Shell32 -Namespace Win32 -ErrorAction SilentlyContinue",
+        "[Win32.Shell32]::SHChangeNotify(0x08000000, 0, [IntPtr]::Zero, [IntPtr]::Zero)"
+    ],
+    "checkver": {
+        "github": "https://github.com/nomo-md/nomo"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/nomo-md/nomo/releases/download/v$version/Nomo_$version_x64.zip"
+            }
+        }
+    }
+}
