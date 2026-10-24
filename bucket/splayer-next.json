@@ -1,35 +1,35 @@
 {
-    "version": "1.1.0",
-    "description": "一款简洁而精致的多平台桌面音乐播放器",
-    "homepage": "https://github.com/SPlayer-Dev/SPlayer-Next",
-    "license": "AGPL-3.0",
-    "architecture": {
-        "64bit": {
-            "url": "https://github.com/SPlayer-Dev/SPlayer-Next/releases/download/v1.1.0/SPlayer-Next-1.1.0-x64-portable.exe#/dl.7z"
-        }
-    },
-    "extract_dir": "$PLUGINSDIR",
-    "pre_install": [
-        "Expand-7zipArchive \"$dir\\app-64.7z\" \"$dir\" -Removal"
-    ],
-    "post_install": [
-        "Remove-Item \"$dir\\`$*\" -Force -Recurse -ErrorAction SilentlyContinue"
-    ],
-    "bin": "SPlayer-Next.exe",
-    "shortcuts": [
-        [
-            "SPlayer-Next.exe",
-            "SPlayer-Next"
-        ]
-    ],
-    "checkver": {
-        "github": "https://github.com/SPlayer-Dev/SPlayer-Next"
-    },
-    "autoupdate": {
-        "architecture": {
-            "64bit": {
-                "url": "https://github.com/SPlayer-Dev/SPlayer-Next/releases/download/v$version/SPlayer-Next-$version-x64-portable.exe#/dl.7z"
-            }
-        }
+  "version": "1.2.0",
+  "description": "一款简洁而精致的多平台桌面音乐播放器",
+  "homepage": "https://github.com/SPlayer-Dev/SPlayer-Next",
+  "license": "AGPL-3.0",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/SPlayer-Dev/SPlayer-Next/releases/download/v1.2.0/SPlayer-Next-1.2.0-x64-portable.exe#/dl.7z"
     }
+  },
+  "extract_dir": "$PLUGINSDIR",
+  "pre_install": [
+    "Expand-7zipArchive \"$dir\\app-64.7z\" \"$dir\" -Removal"
+  ],
+  "post_install": [
+    "Remove-Item \"$dir\\`$*\" -Force -Recurse -ErrorAction SilentlyContinue"
+  ],
+  "bin": "SPlayer-Next.exe",
+  "shortcuts": [
+    [
+      "SPlayer-Next.exe",
+      "SPlayer-Next"
+    ]
+  ],
+  "checkver": {
+    "github": "https://github.com/SPlayer-Dev/SPlayer-Next"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/SPlayer-Dev/SPlayer-Next/releases/download/v$version/SPlayer-Next-$version-x64-portable.exe#/dl.7z"
+      }
+    }
+  }
 }
