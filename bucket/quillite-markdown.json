@@ -1,11 +1,11 @@
 {
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "轻量、本地优先的 Markdown 阅读器与编辑器",
   "homepage": "https://github.com/liuhang798/quillite-markdown",
   "license": "MIT",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/liuhang798/quillite-markdown/releases/download/v3.0.1/quillite-markdown-3.0.1-windows-amd64.exe#/quillite-markdown-3.0.1.7z"
+      "url": "https://github.com/liuhang798/quillite-markdown/releases/download/v3.0.2/quillite-markdown-3.0.2-windows-amd64.exe#/quillite-markdown-3.0.2.7z"
     }
   },
   "bin": "QuilliteMarkdown.exe",
