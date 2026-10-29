@@ -1,12 +1,12 @@
 {
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "OMP Studio - Oh My Pi Studio (desktop console for oh-my-pi)",
   "homepage": "https://github.com/the-snowpear/omp-studio",
   "license": "MIT",
   "depends": "7zip",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/the-snowpear/omp-studio/releases/download/v0.1.16/OMP-Studio-Setup-0.1.16-windows-x64.exe",
+      "url": "https://github.com/the-snowpear/omp-studio/releases/download/v0.1.17/OMP-Studio-Setup-0.1.17-windows-x64.exe",
       "hash": ""
     }
   },

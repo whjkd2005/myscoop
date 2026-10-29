@@ -1,37 +1,37 @@
 {
-    "version": "0.9.100",
-    "description": "OpenReadest 是基于 Readest 的非官方分支，专注于保留本地阅读功能，同时增加 WebDAV 同步支持，专为私有云或自托管 WebDAV 场景设计。",
-    "homepage": "https://github.com/luyishui/OpenReadest",
-    "license": "AGPL-3.0",
-    "depends": "7zip",
-    "architecture": {
-        "64bit": {
-            "url": "https://github.com/luyishui/OpenReadest/releases/download/v0.9.100/OpenReadest_0.9.100_x64-setup.exe",
-            "hash": ""
-        }
-    },
-    "pre_install": [
-        "7z x \"$dir\\OpenReadest_0.9.100_x64-setup.exe\" -o\"$dir\\extract\" -y",
-        "Copy-Item \"$dir\\extract\\openreadest.exe\" \"$dir\\OpenReadest.exe\" -Force",
-        "Copy-Item \"$dir\\extract\\openreadest_thumbnail.dll\" \"$dir\\openreadest_thumbnail.dll\" -Force",
-        "Remove-Item \"$dir\\extract\" -Recurse -Force",
-        "Remove-Item \"$dir\\OpenReadest_0.9.100_x64-setup.exe\" -Force"
-    ],
-    "bin": "OpenReadest.exe",
-    "shortcuts": [
-        [
-            "OpenReadest.exe",
-            "OpenReadest"
-        ]
-    ],
-    "checkver": {
-        "github": "https://github.com/luyishui/OpenReadest"
-    },
-    "autoupdate": {
-        "architecture": {
-            "64bit": {
-                "url": "https://github.com/luyishui/OpenReadest/releases/download/v$version/OpenReadest_$version_x64-setup.exe"
-            }
-        }
+  "version": "0.9.101",
+  "description": "OpenReadest 是基于 Readest 的非官方分支，专注于保留本地阅读功能，同时增加 WebDAV 同步支持，专为私有云或自托管 WebDAV 场景设计。",
+  "homepage": "https://github.com/luyishui/OpenReadest",
+  "license": "AGPL-3.0",
+  "depends": "7zip",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/luyishui/OpenReadest/releases/download/v0.9.101/OpenReadest_0.9.101_x64-setup.exe",
+      "hash": ""
     }
+  },
+  "pre_install": [
+    "7z x \"$dir\\OpenReadest_0.9.100_x64-setup.exe\" -o\"$dir\\extract\" -y",
+    "Copy-Item \"$dir\\extract\\openreadest.exe\" \"$dir\\OpenReadest.exe\" -Force",
+    "Copy-Item \"$dir\\extract\\openreadest_thumbnail.dll\" \"$dir\\openreadest_thumbnail.dll\" -Force",
+    "Remove-Item \"$dir\\extract\" -Recurse -Force",
+    "Remove-Item \"$dir\\OpenReadest_0.9.100_x64-setup.exe\" -Force"
+  ],
+  "bin": "OpenReadest.exe",
+  "shortcuts": [
+    [
+      "OpenReadest.exe",
+      "OpenReadest"
+    ]
+  ],
+  "checkver": {
+    "github": "https://github.com/luyishui/OpenReadest"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/luyishui/OpenReadest/releases/download/v$version/OpenReadest_$version_x64-setup.exe"
+      }
+    }
+  }
 }
