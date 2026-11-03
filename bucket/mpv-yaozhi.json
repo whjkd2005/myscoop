@@ -6,7 +6,7 @@
     "url": "https://github.com/Yaozhil/mpv-Yaozhi/releases/download/mpv-Yaozhi%EF%BC%881.0.8-3%EF%BC%89/Yaoplayer-1.0.8-3.7z",
     "extract_dir": "mpv-Yaozhi-1.0.8-3",
     "shortcuts": [
-        ["mpv.exe", "mpv-Yaozhi"]
+        ["Yaoplayer.exe", "Yaoplayer"]
     ],
     "checkver": {
         "github": "https://github.com/Yaozhil/mpv-Yaozhi"
