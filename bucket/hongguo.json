@@ -1,12 +1,12 @@
 {
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "红果短剧电脑版（红果桌面版）",
   "homepage": "https://github.com/waligoraamodio288-rgb/hongguo-desktop-releases",
   "license": "Unknown",
   "depends": "7zip",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/waligoraamodio288-rgb/hongguo-desktop-releases/releases/download/v1.0.20/hongguo-1.0.20-windows-x86_64-setup.exe",
+      "url": "https://github.com/waligoraamodio288-rgb/hongguo-desktop-releases/releases/download/v1.0.21/hongguo-1.0.21-windows-x86_64-setup.exe",
       "hash": ""
     }
   },
