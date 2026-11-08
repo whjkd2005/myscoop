@@ -1,47 +1,46 @@
-
 {
-    "version": "0.6.2",
-    "description": "Nomo 是一款所见即所得、即时渲染、无干扰的 Markdown 编辑器",
-    "homepage": "https://github.com/nomo-md/nomo",
-    "license": "AGPL-3.0-or-later",
-    "architecture": {
-        "64bit": {
-            "url": "https://github.com/nomo-md/nomo/releases/download/v0.6.2/Nomo_0.6.2_x64.zip",
-            "hash": ""
-        }
-    },
-    "extract_dir": "Nomo",
-    "bin": "Nomo.exe",
-    "shortcuts": [
-        [
-            "Nomo.exe",
-            "Nomo"
-        ]
-    ],
-    "post_install": [
-        "$exe = Join-Path $dir 'Nomo.exe'",
-        "if (-not (Test-Path $exe)) { throw \"Nomo.exe not found: $exe\" }",
-        "$progId = 'Nomo.md'",
-        "$progPath = \"HKCU:\\Software\\Classes\\$progId\"",
-        "$openPath = Join-Path $progPath 'shell\\open\\command'",
-        "$iconPath = Join-Path $progPath 'DefaultIcon'",
-        "New-Item -Path $openPath -Force | Out-Null",
-        "Set-Item -Path $progPath -Value 'Markdown Document'",
-        "Set-Item -Path $openPath -Value ('\"' + $exe + '\" \"%1\"')",
-        "New-Item -Path $iconPath -Force | Out-Null",
-        "Set-Item -Path $iconPath -Value ('\"' + $exe + '\",0')",
-        "$extPath = 'HKCU:\\Software\\Classes\\.md'",
-        "New-Item -Path $extPath -Force | Out-Null",
-        "Set-Item -Path $extPath -Value $progId"
-    ],
-    "checkver": {
-        "github": "https://github.com/nomo-md/nomo"
-    },
-    "autoupdate": {
-        "architecture": {
-            "64bit": {
-                "url": "https://github.com/nomo-md/nomo/releases/download/v$version/Nomo_$version_x64.zip"
-            }
-        }
+  "version": "0.7.0",
+  "description": "Nomo 是一款所见即所得、即时渲染、无干扰的 Markdown 编辑器",
+  "homepage": "https://github.com/nomo-md/nomo",
+  "license": "AGPL-3.0-or-later",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/nomo-md/nomo/releases/download/v0.7.0/Nomo_0.7.0_x64.zip",
+      "hash": ""
     }
+  },
+  "extract_dir": "Nomo",
+  "bin": "Nomo.exe",
+  "shortcuts": [
+    [
+      "Nomo.exe",
+      "Nomo"
+    ]
+  ],
+  "post_install": [
+    "$exe = Join-Path $dir 'Nomo.exe'",
+    "if (-not (Test-Path $exe)) { throw \"Nomo.exe not found: $exe\" }",
+    "$progId = 'Nomo.md'",
+    "$progPath = \"HKCU:\\Software\\Classes\\$progId\"",
+    "$openPath = Join-Path $progPath 'shell\\open\\command'",
+    "$iconPath = Join-Path $progPath 'DefaultIcon'",
+    "New-Item -Path $openPath -Force | Out-Null",
+    "Set-Item -Path $progPath -Value 'Markdown Document'",
+    "Set-Item -Path $openPath -Value ('\"' + $exe + '\" \"%1\"')",
+    "New-Item -Path $iconPath -Force | Out-Null",
+    "Set-Item -Path $iconPath -Value ('\"' + $exe + '\",0')",
+    "$extPath = 'HKCU:\\Software\\Classes\\.md'",
+    "New-Item -Path $extPath -Force | Out-Null",
+    "Set-Item -Path $extPath -Value $progId"
+  ],
+  "checkver": {
+    "github": "https://github.com/nomo-md/nomo"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/nomo-md/nomo/releases/download/v$version/Nomo_$version_x64.zip"
+      }
+    }
+  }
 }
