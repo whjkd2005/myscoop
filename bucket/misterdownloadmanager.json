@@ -1,31 +1,30 @@
-
 {
-    "version": "0.5.0",
-    "description": "Open-source download manager for Windows",
-    "homepage": "https://github.com/anefzaoui/misterdownloadmanager",
-    "license": "GPL-3.0",
-    "architecture": {
-        "64bit": {
-            "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v0.5.0/MisterDownloadManager-0.5.0-portable.zip",
-            "hash": ""
-        }
-    },
-    "persist": "data",
-    "bin": "misterdownloadmanager.exe",
-    "shortcuts": [
-        [
-            "misterdownloadmanager.exe",
-            "Mister Download Manager"
-        ]
-    ],
-    "checkver": {
-        "github": "https://github.com/anefzaoui/misterdownloadmanager"
-    },
-    "autoupdate": {
-        "architecture": {
-            "64bit": {
-                "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v$version/MisterDownloadManager-$version-portable.zip"
-            }
-        }
+  "version": "0.5.2",
+  "description": "Open-source download manager for Windows",
+  "homepage": "https://github.com/anefzaoui/misterdownloadmanager",
+  "license": "GPL-3.0",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v0.5.2/MisterDownloadManager-0.5.2-portable.zip",
+      "hash": ""
     }
+  },
+  "persist": "data",
+  "bin": "misterdownloadmanager.exe",
+  "shortcuts": [
+    [
+      "misterdownloadmanager.exe",
+      "Mister Download Manager"
+    ]
+  ],
+  "checkver": {
+    "github": "https://github.com/anefzaoui/misterdownloadmanager"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v$version/MisterDownloadManager-$version-portable.zip"
+      }
+    }
+  }
 }
