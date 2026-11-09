@@ -10,6 +10,12 @@
             "hash": ""
         }
     },
+"shortcuts": [
+    [
+        "DSH NEXT.exe",
+        "DSH NEXT"
+    ]
+],    
     "persist": [
         "dsh-data"
     ],
