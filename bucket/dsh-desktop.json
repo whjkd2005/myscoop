@@ -16,25 +16,7 @@
         "DSH NEXT"
     ]
 ],    
-    "persist": [
-        "dsh-data"
-    ],
-    "post_install": [
-        "$source = Join-Path $env:USERPROFILE '.dsh'",
-        "$target = Join-Path $persist_dir 'dsh-data'",
-        "New-Item -ItemType Directory -Path $target -Force | Out-Null",
-        "if (Test-Path -LiteralPath $source) {",
-        "    $item = Get-Item -LiteralPath $source -Force",
-        "    if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) {",
-        "        Get-ChildItem -LiteralPath $source -Force | Move-Item -Destination $target -Force",
-        "        Remove-Item -LiteralPath $source -Force",
-        "    }",
-        "}",
-        "if (-not (Test-Path -LiteralPath $source)) {",
-        "    New-Item -ItemType Junction -Path $source -Target $target -Force | Out-Null",
-        "}"
-    ],
-    "checkver": {
+"checkver": {
         "github": "https://github.com/anywhere-labs/dsh-desktop"
     },
     "autoupdate": {
