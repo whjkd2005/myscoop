@@ -5,7 +5,7 @@
   "license": "MIT",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/anywhere-labs/dsh-desktop/releases/download/v2.0.22/DSH-NEXT-2.0.22-x64-Portable.zip",
+      "url": "https://github.com/anywhere-labs/dsh-desktop/releases/download/v2.0.22-next/DSH-NEXT-2.0.22-next-x64-Portable.zip",
       "hash": ""
     }
   },
@@ -21,7 +21,7 @@
   "autoupdate": {
     "architecture": {
       "64bit": {
-        "url": "https://github.com/anywhere-labs/dsh-desktop/releases/download/v$version/DSH-NEXT-$version-x64-Portable.zip"
+        "url": "https://github.com/anywhere-labs/dsh-desktop/releases/download/v$version/DSH-NEXT-$version-next-x64-Portable.zip"
       }
     }
   }
