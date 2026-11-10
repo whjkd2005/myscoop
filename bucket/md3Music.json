@@ -1,0 +1,28 @@
+{
+    "version": "6.3.0",
+    "description": "基于酷狗音乐 API 的 Material 3 音乐播放器",
+    "homepage": "https://github.com/zzyoxml/md3Music",
+    "license": "AGPL-3.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/zzyoxml/md3Music/releases/download/v6.3.0/md3music-windows-6.3.0.zip"
+        }
+    },
+    "bin": "md3music.exe",
+    "shortcuts": [
+        [
+            "md3music.exe",
+            "MD3Music"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/zzyoxml/md3Music"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/zzyoxml/md3Music/releases/download/v$version/md3music-windows-$version.zip"
+            }
+        }
+    }
+}
