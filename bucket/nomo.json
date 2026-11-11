@@ -1,11 +1,11 @@
 {
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Nomo 是一款所见即所得、即时渲染、无干扰的 Markdown 编辑器",
   "homepage": "https://github.com/nomo-md/nomo",
   "license": "AGPL-3.0-or-later",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/nomo-md/nomo/releases/download/v0.7.0/Nomo_0.7.0_x64.zip",
+      "url": "https://github.com/nomo-md/nomo/releases/download/v0.7.1/Nomo_0.7.1_x64.zip",
       "hash": ""
     }
   },
