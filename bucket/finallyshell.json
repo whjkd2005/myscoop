@@ -1,0 +1,29 @@
+{
+    "version": "0.4.0",
+    "description": "原生 SSH/SFTP 桌面客户端，采用类似 FinalShell 的布局",
+    "homepage": "https://github.com/TooonyChen/finallyshell",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/TooonyChen/finallyshell/releases/download/v0.4.0/finallyshell-0.4.0-windows-amd64.zip"
+        }
+    },
+    "persist": [
+        "AppData/Roaming/finallyshell"
+    ],
+    "shortcuts": [
+        [
+            "finallyshell.exe",
+            "FinallyShell"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/TooonyChen/finallyshell"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/TooonyChen/finallyshell/releases/download/v$version/finallyshell-$version-windows-amd64.zip"
+            }
+        }
+    }
+}
