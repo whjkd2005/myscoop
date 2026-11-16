@@ -8,7 +8,7 @@
             "url": "https://github.com/egoist/mygo-music/releases/download/v0.1.25/mygo-music-0.1.25-windows-amd64.tar.gz"
         }
     },
-    "persist": "plugins",
+    "persist": "AppData/Roaming/MyGo Music",
     "shortcuts": [
         [
             "mygo music.exe",
