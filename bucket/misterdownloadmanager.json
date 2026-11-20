@@ -5,7 +5,6 @@
   "license": "GPL-3.0",
   "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v0.5.2/MisterDownloadManager-0.5.2-x64.zip",
   "extract_dir": "MisterDownloadManager-0.5.2-x64",
-  "persist": "data",
   "bin": "misterdownloadmanager.exe",
   "shortcuts": [
     [
