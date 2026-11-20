@@ -1,11 +1,11 @@
 {
-  "version": "5.5.7",
+  "version": "5.5.8",
   "description": "Portable tool for Windows setup, optimization and customization",
   "homepage": "https://github.com/Greedeks/GTweak",
   "license": "BSD-3-Clause",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/Greedeks/GTweak/releases/download/5.5.7/GTweak.zip",
+      "url": "https://github.com/Greedeks/GTweak/releases/download/5.5.8/GTweak.zip",
       "hash": ""
     }
   },
