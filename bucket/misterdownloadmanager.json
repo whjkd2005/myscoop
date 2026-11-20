@@ -19,4 +19,5 @@
   "autoupdate": {
     "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v$version/MisterDownloadManager-$version-portable.zip",
     "extract_dir": "MisterDownloadManager-$version-portable"
+  }
 }
