@@ -3,12 +3,8 @@
   "description": "Open-source download manager for Windows",
   "homepage": "https://github.com/anefzaoui/misterdownloadmanager",
   "license": "GPL-3.0",
-  "architecture": {
-    "64bit": {
-      "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v0.5.2/MisterDownloadManager-0.5.2-portable.zip",
-      "hash": ""
-    }
-  },
+  "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v0.5.2/MisterDownloadManager-0.5.2-portable.zip",
+  "extract_dir": "MisterDownloadManager-0.5.2-portable",
   "persist": "data",
   "bin": "misterdownloadmanager.exe",
   "shortcuts": [
@@ -21,10 +17,6 @@
     "github": "https://github.com/anefzaoui/misterdownloadmanager"
   },
   "autoupdate": {
-    "architecture": {
-      "64bit": {
-        "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v$version/MisterDownloadManager-$version-portable.zip"
-      }
-    }
-  }
+    "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v$version/MisterDownloadManager-$version-portable.zip",
+    "extract_dir": "MisterDownloadManager-$version-portable"
 }
