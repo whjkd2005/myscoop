@@ -1,22 +1,42 @@
+
 {
-  "version": "0.5.2",
-  "description": "Open-source download manager for Windows",
-  "homepage": "https://github.com/anefzaoui/misterdownloadmanager",
-  "license": "GPL-3.0",
-  "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v0.5.2/MisterDownloadManager-0.5.2-x64.zip",
-  "extract_dir": "MisterDownloadManager-0.5.2-x64",
-  "bin": "misterdownloadmanager.exe",
-  "shortcuts": [
-    [
-      "misterdownloadmanager.exe",
-      "Mister Download Manager"
-    ]
-  ],
-  "checkver": {
-    "github": "https://github.com/anefzaoui/misterdownloadmanager"
-  },
-  "autoupdate": {
-    "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v$version/MisterDownloadManager-$version-x64.zip",
-    "extract_dir": "MisterDownloadManager-$version-x64"
-  }
+    "version": "0.5.2",
+    "description": "Open-source download manager for Windows",
+    "homepage": "https://github.com/anefzaoui/misterdownloadmanager",
+    "license": "GPL-3.0",
+    "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v0.5.2/MisterDownloadManager-0.5.2-x64.zip",
+    "extract_dir": "MisterDownloadManager-0.5.2-x64",
+    "bin": "misterdownloadmanager.exe",
+    "shortcuts": [
+        [
+            "misterdownloadmanager.exe",
+            "Mister Download Manager"
+        ]
+    ],
+    "post_install": [
+        "$nmHost = Join-Path $dir 'misterdownloadmanager-nmhost.exe'",
+        "if (Test-Path $nmHost) {",
+        "    Write-Host 'Registering MDM browser integration...'",
+        "    & $nmHost --register",
+        "    if ($LASTEXITCODE -ne 0) {",
+        "        Write-Host 'MDM browser integration registration failed.' -ForegroundColor Red",
+        "    }",
+        "} else {",
+        "    Write-Host 'Native Messaging Host not found.' -ForegroundColor Yellow",
+        "}"
+    ],
+    "pre_uninstall": [
+        "$nmHost = Join-Path $dir 'misterdownloadmanager-nmhost.exe'",
+        "if (Test-Path $nmHost) {",
+        "    Write-Host 'Unregistering MDM browser integration...'",
+        "    & $nmHost --unregister",
+        "}"
+    ],
+    "checkver": {
+        "github": "https://github.com/anefzaoui/misterdownloadmanager"
+    },
+    "autoupdate": {
+        "url": "https://github.com/anefzaoui/misterdownloadmanager/releases/download/v$version/MisterDownloadManager-$version-x64.zip",
+        "extract_dir": "MisterDownloadManager-$version-x64"
+    }
 }
