@@ -1,28 +1,28 @@
 {
-    "version": "0.1.25",
-    "description": "原生桌面音乐播放器，支持通过插件扩展音乐服务",
-    "homepage": "https://music.egoist.dev/",
-    "license": "AGPL-3.0-only",
-    "architecture": {
-        "64bit": {
-            "url": "https://github.com/egoist/mygo-music/releases/download/v0.1.25/mygo-music-0.1.25-windows-amd64.tar.gz"
-        }
-    },
-    "persist": "AppData/Roaming/MyGo Music",
-    "shortcuts": [
-        [
-            "mygo music.exe",
-            "MyGo Music"
-        ]
-    ],
-    "checkver": {
-        "github": "https://github.com/egoist/mygo-music"
-    },
-    "autoupdate": {
-        "architecture": {
-            "64bit": {
-                "url": "https://github.com/egoist/mygo-music/releases/download/v$version/mygo-music-$version-windows-amd64.tar.gz"
-            }
-        }
+  "version": "0.1.26",
+  "description": "原生桌面音乐播放器，支持通过插件扩展音乐服务",
+  "homepage": "https://music.egoist.dev/",
+  "license": "AGPL-3.0-only",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/egoist/mygo-music/releases/download/v0.1.26/mygo-music-0.1.26-windows-amd64.tar.gz"
     }
+  },
+  "persist": "AppData/Roaming/MyGo Music",
+  "shortcuts": [
+    [
+      "mygo music.exe",
+      "MyGo Music"
+    ]
+  ],
+  "checkver": {
+    "github": "https://github.com/egoist/mygo-music"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/egoist/mygo-music/releases/download/v$version/mygo-music-$version-windows-amd64.tar.gz"
+      }
+    }
+  }
 }
